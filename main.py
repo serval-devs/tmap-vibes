@@ -9,8 +9,8 @@ from sklearn.model_selection import train_test_split
 
 # Step 1: Load the dataset
 # Load real and fake news datasets from CSV files
-df_real = pd.read_csv("./TMAP2025Mar/dataset/True.csv")
-df_fake = pd.read_csv("./TMAP2025Mar/dataset/Fake.csv")
+df_real = pd.read_csv("./dataset/True.csv")
+df_fake = pd.read_csv("./dataset/Fake.csv")
 
 # Assign labels: 1 for real news, 0 for fake news
 df_real['label'] = 1
