@@ -1,3 +1,4 @@
-# React + TypeScript + Vite
+This project uses [Shadcn](https://ui.shadcn.com/docs) as the UI framework.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Setup
+Make sure to run `npm install` to install all the dependencies.
