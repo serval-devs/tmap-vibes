@@ -1,0 +1,4 @@
+.database.env
+
+# Python virtual environment
+vibe/
