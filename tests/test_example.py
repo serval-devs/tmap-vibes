@@ -2,6 +2,7 @@ def add(a, b):
     """A simple function to add two numbers."""
     return a + b
 
+
 def test_add():
     """Test the add function."""
     assert add(2, 3) == 5
