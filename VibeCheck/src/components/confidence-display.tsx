@@ -28,7 +28,6 @@ export function ConfidenceDisplay({ score, message }: ConfidenceDisplayProps) {
 
   const getAlertVariant = () => {
     if (score < 0.3) return "default"
-    if (score < 0.7) return "warning"
     return "destructive"
   }
 
