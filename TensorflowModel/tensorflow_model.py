@@ -1,10 +1,8 @@
 import pandas as pd
-# import numpy as np
 import pickle
-# import tensorflow as tf
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, Dense, Flatten
 from sklearn.model_selection import train_test_split
 
@@ -28,7 +26,11 @@ def creat_new_model(FakeDataPath, TrueDataPath):
     y = df['label']
 
     # Split the dataset into training and testing sets (80% train, 20% test)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+                                                        X,
+                                                        y,
+                                                        test_size=0.2,
+                                                        random_state=42)
 
     # Step 3: Tokenization and text preprocessing
     # Create a tokenizer with a vocabulary size of 5000 words
@@ -62,11 +64,19 @@ def creat_new_model(FakeDataPath, TrueDataPath):
     ])
 
     # Compile the model with Adam optimizer and binary cross-entropy loss
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(
+            optimizer='adam',
+            loss='binary_crossentropy',
+            metrics=['accuracy'])
 
     # Step 5: Train the model
     # Train for 5 epochs with batch size of 32, using validation data
-    model.fit(X_train_pad, y_train, epochs=5, batch_size=32, validation_data=(X_test_pad, y_test))
+    model.fit(
+            X_train_pad,
+            y_train,
+            epochs=5,
+            batch_size=32,
+            validation_data=(X_test_pad, y_test))
 
     # Step 6: Evaluate the model
     test_loss, test_acc = model.evaluate(X_test_pad, y_test)
@@ -77,26 +87,3 @@ def creat_new_model(FakeDataPath, TrueDataPath):
     with open("./MLModels/tokenizer.pkl", "wb") as handle:
         pickle.dump(tokenizer, handle)
         print("Tokenizer saved as tokenizer.pkl")
-
-
-def load_model_and_tokenizer(model_path, tokenizer_path):
-    # Load trained model
-    model = load_model(model_path)
-    print("Model loaded successfully.")
-
-    # Load tokenizer
-    with open(tokenizer_path, "rb") as handle:
-        tokenizer = pickle.load(handle)
-    print("Tokenizer loaded successfully.")
-
-    return model, tokenizer
-
-
-def quick_test(model, tokenizer, sample_text=["Breaking news! The president resigns due to corruption charges."], max_len=300):
-
-    sample_seq = tokenizer.texts_to_sequences(sample_text)  # Convert text to sequences
-    sample_pad = pad_sequences(sample_seq, maxlen=max_len, padding='post')  # Pad sequence
-
-    # Predict whether the news is real or fake
-    prediction = model.predict(sample_pad)
-    print("Real News" if prediction > 0.5 else "Fake News")
