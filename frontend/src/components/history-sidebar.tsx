@@ -64,7 +64,7 @@ export function HistorySidebar({ history, onSelectItem, onClearHistory }: Histor
 
                   return (
                     <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton onClick={() => onSelectItem(item)} className="relative pl-10">
+                      <SidebarMenuButton onClick={() => { onSelectItem(item) } } className="relative pl-10">
                         <div
                           className={`absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full ${getScoreColor()}`}
                         />

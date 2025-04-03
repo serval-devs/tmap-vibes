@@ -1,5 +1,3 @@
-"use client"
-
 import { AlertCircle, CheckCircle, HelpCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { cn } from "@/lib/utils"
@@ -49,7 +47,7 @@ export function ConfidenceDisplay({ score, message }: ConfidenceDisplayProps) {
         <div className="relative h-4 w-full overflow-hidden rounded-full bg-secondary">
           <div
             className={cn("h-full transition-all duration-500", getColorClass())}
-            style={{ width: `${percentage}%` }}
+            style={{ width: `${percentage.toString()}%` }}
           />
         </div>
       </div>

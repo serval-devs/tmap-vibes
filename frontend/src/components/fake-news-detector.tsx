@@ -11,6 +11,18 @@ import { ConfidenceDisplay } from "@/components/confidence-display"
 import { HistorySidebar, type HistoryItem } from "@/components/history-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 
+interface fakeNewsHistory {
+    id: string
+    title: string
+    content: string
+    url?: string
+    timestamp: Date
+    result: {
+        score: number
+        message: string
+    }
+}
+
 export function FakeNewsDetector() {
   const [url, setUrl] = useState("")
   const [text, setText] = useState("")
@@ -28,9 +40,9 @@ export function FakeNewsDetector() {
     const savedHistory = localStorage.getItem("fakeNewsHistory")
     if (savedHistory) {
       try {
-        const parsedHistory = JSON.parse(savedHistory)
+        const parsedHistory = JSON.parse(savedHistory) as fakeNewsHistory[]
         // Convert string dates back to Date objects
-        const historyWithDates = parsedHistory.map((item: any) => ({
+        const historyWithDates = parsedHistory.map((item) => ({
           ...item,
           timestamp: new Date(item.timestamp),
         }))
@@ -47,17 +59,6 @@ export function FakeNewsDetector() {
   }, [history])
 
   const analyzeContent = async () => {
-    let contentToAnalyze = ""
-
-    // Prioritize text content, then URL if text is empty
-    if (text.trim()) {
-      contentToAnalyze = text
-    } else if (url.trim()) {
-      contentToAnalyze = url
-    } else {
-      return // Nothing to analyze
-    }
-
     setIsAnalyzing(true)
 
     // Simulate API call to ML model
@@ -102,13 +103,13 @@ export function FakeNewsDetector() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    analyzeContent()
+    void analyzeContent()
   }
 
   const handleSelectHistoryItem = (item: HistoryItem) => {
     setSelectedHistoryItem(item)
     setText(item.content)
-    setUrl(item.url || "")
+    setUrl(item.url ?? "")
     setResult(item.result)
 
     setFileName("")
@@ -140,7 +141,7 @@ export function FakeNewsDetector() {
                       id="url"
                       placeholder="https://example.com/article"
                       value={url}
-                      onChange={(e) => setUrl(e.target.value)}
+                      onChange={(e) => { setUrl(e.target.value) }}
                     />
                   </div>
 
@@ -156,7 +157,7 @@ export function FakeNewsDetector() {
                         id="content"
                         placeholder="Paste or type the article text here, or drag and drop a file..."
                         value={text}
-                        onChange={(e) => setText(e.target.value)}
+                        onChange={(e) => { setText(e.target.value) } }
                         className="min-h-[200px] resize-y"
                       />
                     </div>
