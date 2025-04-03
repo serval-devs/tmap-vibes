@@ -36,5 +36,6 @@ export default tseslint.config(
                 { allowConstantExport: true },
             ],
         },
+        ignores: [ '**/src/components/ui/*.tsx' ],
     },
 )
