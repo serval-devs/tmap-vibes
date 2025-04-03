@@ -1,7 +1,7 @@
 import pandas as pd
-import numpy as np
+# import numpy as np
 import pickle
-import tensorflow as tf
+# import tensorflow as tf
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential, load_model
@@ -77,7 +77,8 @@ def creat_new_model(FakeDataPath, TrueDataPath):
     with open("./MLModels/tokenizer.pkl", "wb") as handle:
         pickle.dump(tokenizer, handle)
         print("Tokenizer saved as tokenizer.pkl")
- 
+
+
 def load_model_and_tokenizer(model_path, tokenizer_path):
     # Load trained model
     model = load_model(model_path)
