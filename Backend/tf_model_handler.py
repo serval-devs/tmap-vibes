@@ -29,4 +29,4 @@ def quick_test(
 
     # Predict whether the news is real or fake
     prediction = model.predict(sample_pad)
-    print("Real News" if prediction > 0.5 else "Fake News")
+    print("Real News" if prediction[0][0] > 0.5 else "Fake News")

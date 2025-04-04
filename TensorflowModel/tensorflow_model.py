@@ -7,12 +7,30 @@ from tensorflow.keras.layers import Embedding, Dense, Flatten
 from sklearn.model_selection import train_test_split
 
 
-def creat_new_model(FakeDataPath, TrueDataPath):
+def create_new_model(
+                    FakeDataPath,
+                    TrueDataPath,
+                    kerasPath="./MLModels/FakeTrueModel.keras",
+                    tokenizerPath="./MLModels/tokenizer.pkl"):
     # Step 1: Load the dataset
     # Load real and fake news datasets from CSV files
-    df_real = pd.read_csv(TrueDataPath)
-    df_fake = pd.read_csv(FakeDataPath)
+    try:
+        df_real = pd.read_csv(TrueDataPath)
+    except Exception as e:
+        raise FileNotFoundError(
+            f"Failed to read real data file from '{TrueDataPath}': "
+            f"{e}"
+        )
+    try:
+        df_fake = pd.read_csv(FakeDataPath)
+    except Exception as e:
+        raise FileNotFoundError(
+            f"Failed to read real data file from '{FakeDataPath}': "
+            f"{e}"
+        )
 
+    df_real['text'] = df_real['text'].fillna('')
+    df_fake['text'] = df_fake['text'].fillna('')
     # Assign labels: 1 for real news, 0 for fake news
     df_real['label'] = 1
     df_fake['label'] = 0
@@ -51,7 +69,7 @@ def creat_new_model(FakeDataPath, TrueDataPath):
     # Step 4: Build the Neural Network Model
     model = Sequential([
         # Embedding layer converts word indices into dense vectors
-        Embedding(input_dim=5000, output_dim=32, input_length=max_len),
+        Embedding(input_dim=5000, output_dim=32),
 
         # Flatten layer converts 2D input (word embeddings) into 1D
         Flatten(),
@@ -82,8 +100,8 @@ def creat_new_model(FakeDataPath, TrueDataPath):
     test_loss, test_acc = model.evaluate(X_test_pad, y_test)
     print(f'Test Accuracy: {test_acc*100:.2f}%')
 
-    model.save("./MLModels/FakeTrueModel.keras")
+    model.save(kerasPath)
     print("Model saved as FakeTrueModel.keras")
-    with open("./MLModels/tokenizer.pkl", "wb") as handle:
+    with open(tokenizerPath, "wb") as handle:
         pickle.dump(tokenizer, handle)
         print("Tokenizer saved as tokenizer.pkl")
