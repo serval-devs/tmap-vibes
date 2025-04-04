@@ -5,11 +5,14 @@ on:
     branches:
       - main
       - Developing
-      - "T*"
+      
   pull_request:
     branches:
       - main
       - Developing
+      - "bug/T*"
+      - "feature/T*"
+      - "T*" #Delete after merge of T001 and Developing
 
 jobs:
   build:
