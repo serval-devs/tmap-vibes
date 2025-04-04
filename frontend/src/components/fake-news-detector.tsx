@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ConfidenceDisplay } from "@/components/confidence-display"
 import { HistorySidebar, type HistoryItem } from "@/components/history-sidebar"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { ArticleTextBox } from "@/components/article-text-box"
 
 interface fakeNewsHistory {
     id: string
@@ -31,6 +32,7 @@ export function FakeNewsDetector() {
   const [result, setResult] = useState<{ score: number; message: string } | null>(null)
   const [history, setHistory] = useState<HistoryItem[]>([])
   const [selectedHistoryItem, setSelectedHistoryItem] = useState<HistoryItem | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
@@ -60,45 +62,56 @@ export function FakeNewsDetector() {
 
   const analyzeContent = async () => {
     setIsAnalyzing(true)
+    setError(null) // Clear any previous errors
 
-    // Simulate API call to ML model
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      // Simulate API call to ML model
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-    // Generate a random score between 0 and 1 for demonstration
-    const fakeScore = Math.random()
+      if (!text.trim() && !url.trim()) {
+        throw new Error("Please provide either article text or URL")
+      }
 
-    let message = ""
-    if (fakeScore < 0.3) {
-      message = "This content appears to be reliable."
-    } else if (fakeScore < 0.7) {
-      message = "This content contains some questionable elements."
-    } else {
-      message = "This content has a high likelihood of being fake news."
+      // Generate a random score between 0 and 1 for demonstration
+      const fakeScore = Math.random()
+
+      let message = ""
+      if (fakeScore < 0.3) {
+        message = "This content appears to be reliable."
+      } else if (fakeScore < 0.7) {
+        message = "This content contains some questionable elements."
+      } else {
+        message = "This content has a high likelihood of being fake news."
+      }
+
+      const newResult = { score: fakeScore, message }
+      setResult(newResult)
+
+      // Create a history item
+      const title = fileName || url || text.substring(0, 30) + "..."
+      const newHistoryItem: HistoryItem = {
+        id: uuidv4(),
+        title,
+        content: text,
+        url: url || undefined,
+        timestamp: new Date(),
+        result: newResult,
+      }
+
+      // Add to history (most recent first)
+      setHistory((prev) => [newHistoryItem, ...prev])
+      setSelectedHistoryItem(null)
+
+      // Scroll to results section after a short delay to ensure rendering is complete
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth" })
+      }, 100)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred")
+      setResult(null)
+    } finally {
+      setIsAnalyzing(false)
     }
-
-    const newResult = { score: fakeScore, message }
-    setResult(newResult)
-    setIsAnalyzing(false)
-
-    // Create a history item
-    const title = fileName || url || text.substring(0, 30) + "..."
-    const newHistoryItem: HistoryItem = {
-      id: uuidv4(),
-      title,
-      content: text,
-      url: url || undefined,
-      timestamp: new Date(),
-      result: newResult,
-    }
-
-    // Add to history (most recent first)
-    setHistory((prev) => [newHistoryItem, ...prev])
-    setSelectedHistoryItem(null)
-
-    // Scroll to results section after a short delay to ensure rendering is complete
-    setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth" })
-    }, 100)
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -145,23 +158,13 @@ export function FakeNewsDetector() {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <Label htmlFor="content">Article Text</Label>
-                      {fileName && <span className="text-sm text-primary">File: {fileName}</span>}
-                    </div>
-
-                    <div className="relative border rounded-md" >
-                      <Textarea
-                        ref={textAreaRef}
-                        id="content"
-                        placeholder="Paste or type the article text here, or drag and drop a file..."
-                        value={text}
-                        onChange={(e) => { setText(e.target.value) } }
-                        className="min-h-[200px] resize-y"
-                      />
-                    </div>
-                  </div>
+                  <ArticleTextBox
+                    ref={textAreaRef}
+                    value={text}
+                    onChange={setText}
+                    fileName={fileName}
+                    placeholder="Paste or type the article text here, or drag and drop a file..."
+                  />
 
                   <Button type="submit" className="w-full" disabled={isAnalyzing || (!url.trim() && !text.trim())}>
                     {isAnalyzing ? "Analyzing..." : "Analyze Content"}
@@ -169,6 +172,12 @@ export function FakeNewsDetector() {
                 </form>
               </CardContent>
             </Card>
+
+            {error && (
+              <div className="bg-destructive/15 border border-destructive text-destructive px-4 py-3 rounded-md">
+                <p className="text-sm">{error}</p>
+              </div>
+            )}
 
             {result && (
               <div
