@@ -1,4 +1,10 @@
-.database.env
+node_modules/
+.DS_Store
+.idea/
+*.keras
+*.pkl
+*.pyc
 
 # Python virtual environment
 vibe/
+venv/
