@@ -26,7 +26,7 @@ export const ArticleTextBox = forwardRef<HTMLTextAreaElement, ArticleTextBoxProp
           <Textarea
             ref={ref}
             id="content"
-            placeholder={placeholder || "Paste or type the article text here..."}
+            placeholder={placeholder ?? "Paste or type the article text here..."}
             value={value}
             onChange={handleChange}
             className="min-h-[200px] resize-y"
