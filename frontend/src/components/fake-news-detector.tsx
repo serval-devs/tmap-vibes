@@ -159,10 +159,8 @@ export function FakeNewsDetector() {
 
                   <ArticleTextBox
                     ref={textAreaRef}
-                    value={text}
-                    onChange={setText}
+                    onValueChange={(value) => { setText(value) }}
                     fileName={fileName}
-                    placeholder="Paste or type the article text here, or drag and drop a file..."
                   />
 
                   <Button type="submit" className="w-full" disabled={isAnalyzing || (!url.trim() && !text.trim())}>
