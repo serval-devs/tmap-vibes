@@ -32,7 +32,6 @@ export function ArticleTextBox({
         {fileName && <span className="text-sm text-primary">File: {fileName}</span>}
       </div>
 
-      <div className="relative border rounded-md">
         <Textarea
           ref={ref}
           id="content"
@@ -42,7 +41,6 @@ export function ArticleTextBox({
           className="min-h-[200px] resize-y"
         />
       </div>
-    </div>
   )
 }
 
