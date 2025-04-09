@@ -2,11 +2,10 @@ from unittest.mock import patch, MagicMock
 import sys
 import os
 
-
 sys.path.append(os.path.abspath(
-                        os.path.join(
-                            os.path.dirname(__file__), '..')))  # noqa: E402
-from Backend.tf_model_handler import (  # noqa: E402
+    os.path.join(
+        os.path.dirname(__file__), '..')))  # noqa: E402
+from tf_model_handler import (  # noqa: E402
     load_model_and_tokenizer,  # noqa: E402
     quick_test  # noqa: E402
 )  # noqa: E402
@@ -14,7 +13,7 @@ from Backend.tf_model_handler import (  # noqa: E402
 
 @patch("pickle.load")
 @patch("builtins.open")
-@patch("Backend.tf_model_handler.load_model")
+@patch("tf_model_handler.load_model")
 def test_load_model_and_tokenizer(
                             mock_load_model,
                             mock_open,
@@ -36,8 +35,8 @@ def test_load_model_and_tokenizer(
     assert tokenizer == mock_tokenizer, "Tokenizer was not loaded correctly"
 
 
-@patch("Backend.tf_model_handler.load_model_and_tokenizer")
-@patch("Backend.tf_model_handler.pad_sequences")
+@patch("tf_model_handler.load_model_and_tokenizer")
+@patch("tf_model_handler.pad_sequences")
 def test_quick_test(
                     mock_pad_sequences,
                     mock_load_model_and_tokenizer):
