@@ -1,27 +1,16 @@
 import type React from "react"
 
-import { useState, useRef, useEffect } from "react"
-import { v4 as uuidv4 } from "uuid"
+import { BinaryDisplay } from "@/components/binary-display"
+import { HistorySidebar } from "@/components/history-sidebar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ConfidenceDisplay } from "@/components/confidence-display"
-import { HistorySidebar, type HistoryItem } from "@/components/history-sidebar"
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { ArticleTextBox } from "@/components/article-text-box"
-
-interface fakeNewsHistory {
-    id: string
-    title: string
-    content: string
-    url?: string
-    timestamp: Date
-    result: {
-        score: number
-        message: string
-    }
-}
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { useEffect, useRef, useState } from "react"
+import { v4 as uuidv4 } from "uuid"
+import { GetHistory, HistoryItem } from "@/lib/history"
 
 export function FakeNewsDetector() {
   const [url, setUrl] = useState("")
@@ -29,30 +18,12 @@ export function FakeNewsDetector() {
   const [fileName, setFileName] = useState("")
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<{ score: number; message: string } | null>(null)
-  const [history, setHistory] = useState<HistoryItem[]>([])
+  const [history, setHistory] = useState<HistoryItem[]>(() => GetHistory())
   const [selectedHistoryItem, setSelectedHistoryItem] = useState<HistoryItem | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
-
-  // Load history from localStorage on component mount
-  useEffect(() => {
-    const savedHistory = localStorage.getItem("fakeNewsHistory")
-    if (savedHistory) {
-      try {
-        const parsedHistory = JSON.parse(savedHistory) as fakeNewsHistory[]
-        // Convert string dates back to Date objects
-        const historyWithDates = parsedHistory.map((item) => ({
-          ...item,
-          timestamp: new Date(item.timestamp),
-        }))
-        setHistory(historyWithDates)
-      } catch (error) {
-        console.error("Failed to parse history:", error)
-      }
-    }
-  }, [])
 
   // Save history to localStorage whenever it changes
   useEffect(() => {
@@ -147,7 +118,6 @@ export function FakeNewsDetector() {
             <Card>
               <CardContent className="pt-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-2">
                     <Label htmlFor="url">Article URL (Optional)</Label>
                     <Input
                       id="url"
@@ -155,13 +125,11 @@ export function FakeNewsDetector() {
                       value={url}
                       onChange={(e) => { setUrl(e.target.value) }}
                     />
-                  </div>
-
-                  <ArticleTextBox
+                    <ArticleTextBox
                     ref={textAreaRef}
-                    onValueChange={(value) => { setText(value) }}
+                    onValueChange={(value: string) => { setText(value) }}
                     fileName={fileName}
-                  />
+                    />
 
                   <Button type="submit" className="w-full" disabled={isAnalyzing || (!url.trim() && !text.trim())}>
                     {isAnalyzing ? "Analyzing..." : "Analyze Content"}
@@ -183,7 +151,7 @@ export function FakeNewsDetector() {
                   selectedHistoryItem ? "opacity-100 transition-opacity" : "animate-in fade-in-50 duration-300"
                 }
               >
-                <ConfidenceDisplay score={result.score} message={result.message} />
+                <BinaryDisplay isFake={result.score > 0.5} />
               </div>
             )}
           </div>
