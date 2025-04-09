@@ -35,7 +35,7 @@ export function ArticleTextBox({
         <Textarea
           ref={ref}
           id="content"
-          placeholder={placeholder ?? "Paste or type the article text here or drag and drop a file...."}
+          placeholder={placeholder ?? "Paste or type the article text here or drag and drop a file..."}
           value={value}
           onChange={handleChange}
           className="min-h-[200px] resize-y"
