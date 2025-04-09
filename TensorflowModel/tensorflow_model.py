@@ -10,8 +10,8 @@ from sklearn.model_selection import train_test_split
 def create_new_model(
                     FakeDataPath,
                     TrueDataPath,
-                    kerasPath="./MLModels/FakeTrueModel.keras",
-                    tokenizerPath="./MLModels/tokenizer.pkl"):
+                    kerasPath="./FakeTrueModel.keras",
+                    tokenizerPath="./tokenizer.pkl"):
     # Step 1: Load the dataset
     # Load real and fake news datasets from CSV files
     try:
