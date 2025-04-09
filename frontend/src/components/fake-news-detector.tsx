@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ArticleTextBox } from "@/components/article-text-box"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useRef, useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 import { GetHistory, HistoryItem } from "@/lib/history"
@@ -118,7 +118,6 @@ export function FakeNewsDetector() {
             <Card>
               <CardContent className="pt-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-2">
                     <Label htmlFor="url">Article URL (Optional)</Label>
                     <Input
                       id="url"
@@ -126,13 +125,11 @@ export function FakeNewsDetector() {
                       value={url}
                       onChange={(e) => { setUrl(e.target.value) }}
                     />
-                  </div>
-
-                  <ArticleTextBox
+                    <ArticleTextBox
                     ref={textAreaRef}
-                    onValueChange={(value) => { setText(value) }}
+                    onValueChange={(value: string) => { setText(value) }}
                     fileName={fileName}
-                  />
+                    />
 
                   <Button type="submit" className="w-full" disabled={isAnalyzing || (!url.trim() && !text.trim())}>
                     {isAnalyzing ? "Analyzing..." : "Analyze Content"}
