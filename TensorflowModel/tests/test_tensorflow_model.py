@@ -1,11 +1,10 @@
 import sys
 import os
 
-
 sys.path.append(os.path.abspath(
     os.path.join(
         os.path.dirname(__file__), '..')))  # noqa: E402
-from TensorflowModel.tensorflow_model import create_new_model  # noqa: E402
+from tensorflow_model import create_new_model  # noqa: E402
 
 
 def test_create_new_model(tmp_path):
