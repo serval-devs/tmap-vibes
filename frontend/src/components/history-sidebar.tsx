@@ -52,8 +52,8 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
                 {history.map((item) => {
                   // Determine color based on score
                   const getScoreColor = () => {
-                    if (item.result.score < 0.3) return "bg-green-500"
-                    if (item.result.score < 0.7) return "bg-yellow-500"
+                    if (item.result.confidence < 0.3) return "bg-green-500"
+                    if (item.result.confidence < 0.7) return "bg-yellow-500"
                     return "bg-red-500"
                   }
 

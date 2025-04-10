@@ -1,13 +1,12 @@
+import { type ArticleCheck } from "@/lib/article"
+
 export interface HistoryItem {
   id: string
   title: string
   content: string
   url?: string
   timestamp: Date
-  result: {
-    score: number
-    message: string
-  }
+  result: ArticleCheck
 }
 
 export function GetHistory(): HistoryItem[] {

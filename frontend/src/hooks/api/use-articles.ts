@@ -1,13 +1,8 @@
-import { Article } from "@/lib/article";
+import { Article, ArticleCheck } from "@/lib/article";
 import { HistoryItem } from "@/lib/history";
 import { useMutation } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { useAddHistory } from "@/hooks/use-history";
-
-interface ArticleCheck {
-  isFake: boolean;
-  confidence: number;
-}
 
 export function useCheckArticle() {
   const { mutateAsync: addHistory } = useAddHistory();
@@ -43,9 +38,6 @@ export function useCheckArticle() {
     // Save the result to history after the mutation is successful.
     onSuccess: async ({ article, result }) => {
       const title = article.title ?? article.content.substring(0, 30) + "...";
-      const message = result.isFake
-        ? "This content is likely to be fake."
-        : "This content appears to be reliable.";
 
       const newHistoryItem: HistoryItem = {
         id: uuidv4(),
@@ -53,10 +45,7 @@ export function useCheckArticle() {
         content: article.content,
         url: undefined,
         timestamp: new Date(),
-        result: {
-          score: result.confidence,
-          message,
-        },
+        result,
       };
 
       await addHistory(newHistoryItem);
