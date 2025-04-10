@@ -60,13 +60,13 @@ export function ArticleTextBox({
         }
 
         // Check length requirements
-        if (text.length < MIN_LENGTH) {
+        if (trimmedText.length < MIN_LENGTH) {
           return {
             error: `Text must be at least ${MIN_LENGTH.toString()} characters`,
             isValid: false
           }
         }
-        if (text.length > MAX_LENGTH) {
+        if (trimmedText.length > MAX_LENGTH) {
           return {
             error: `Text cannot exceed ${MAX_LENGTH.toString()} characters`,
             isValid: false
@@ -89,9 +89,8 @@ export function ArticleTextBox({
   const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value
     setValue(() => newValue)
-    if (validateInput(newValue)) {
-      onValueChange?.(newValue)
-    }
+    onValueChange?.(newValue)
+    validateInput(newValue)
   }, [validateInput, onValueChange])
 
   useEffect(() => {
