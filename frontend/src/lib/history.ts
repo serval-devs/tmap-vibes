@@ -16,7 +16,13 @@ export function GetHistory(): HistoryItem[] {
         return [];
     }
 
-    const parsedHistory: HistoryItem[] = JSON.parse(savedHistory) as HistoryItem[];
+    let parsedHistory: HistoryItem[] = [];
+    try {
+        parsedHistory = JSON.parse(savedHistory) as HistoryItem[];
+    } catch (error) {
+        console.error("Failed to parse history from localStorage:", error);
+        return [];
+    }
     
     // Convert string dates back to Date objects
     const historyWithDates = parsedHistory.map((item) => ({
