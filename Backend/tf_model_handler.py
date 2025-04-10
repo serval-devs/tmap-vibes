@@ -16,17 +16,26 @@ def load_model_and_tokenizer(model_path, tokenizer_path):
     return model, tokenizer
 
 
-def quick_test(
+def validate_text_content(article: str) -> None:
+    if not article or not article.strip():
+        raise ValueError("Article must not be empty.")
+    if not isinstance(article, str):
+        raise TypeError("Article must be a string.")
+    if len(article) > 300:
+        raise ValueError("Article is too long")
+
+
+def true_or_false(
             model,
             tokenizer,
-            sample_text=[
-                    "Breaking news! "
-                    "The president resigns due to corruption charges."],
+            text,
             max_len=300):
+    validate_text_content(text)
 
-    sample_seq = tokenizer.texts_to_sequences(sample_text)
-    sample_pad = pad_sequences(sample_seq, maxlen=max_len, padding='post')
+    seq = tokenizer.texts_to_sequences(text)
+    pad = pad_sequences(seq, maxlen=max_len, padding='post')
 
-    # Predict whether the news is real or fake
-    prediction = model.predict(sample_pad)
+    prediction = model.predict(pad)
+#    return prediction
+    print(prediction[0][0]*100)
     print("Real News" if prediction[0][0] > 0.5 else "Fake News")

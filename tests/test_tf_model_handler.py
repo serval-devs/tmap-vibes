@@ -38,7 +38,7 @@ def test_load_model_and_tokenizer(
 
 @patch("Backend.tf_model_handler.load_model_and_tokenizer")
 @patch("Backend.tf_model_handler.pad_sequences")
-def test_quick_test(
+def test_result(
                     mock_pad_sequences,
                     mock_load_model_and_tokenizer):
     mock_model = MagicMock()
@@ -51,3 +51,7 @@ def test_quick_test(
     mock_model.predict.return_value = [[0.9]]
 
     quick_test(mock_model, mock_tokenizer)
+
+def test_result_true(
+                    
+                    ):
