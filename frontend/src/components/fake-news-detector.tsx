@@ -4,7 +4,7 @@ import { HistorySidebar } from "@/components/history-sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { useCheckArticle } from "@/hooks/api/articles";
+import { useCheckArticle } from "@/hooks/api/use-articles";
 import { useEffect, useRef, useState } from "react";
 
 export function FakeNewsDetector() {

@@ -2,7 +2,7 @@ import { Article } from "@/lib/article";
 import { HistoryItem } from "@/lib/history";
 import { useMutation } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
-import { useAddHistory } from "@/hooks/history";
+import { useAddHistory } from "@/hooks/use-history";
 
 interface ArticleCheck {
   isFake: boolean;

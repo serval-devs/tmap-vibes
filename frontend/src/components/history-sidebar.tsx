@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import { HistoryItem } from "@/lib/history"
-import { useClearHistory, useGetHistory } from "@/hooks/history"
+import { useClearHistory, useGetHistory } from "@/hooks/use-history"
 
 interface HistorySidebarProps {
   onSelectItem: (item: HistoryItem) => void
