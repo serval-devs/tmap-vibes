@@ -13,21 +13,6 @@ export function BinaryDisplay({ isFake }: BinaryDisplayProps) {
     return "bg-green-500";
   };
 
-  const getIcon = () => {
-    if (isFake) return <AlertCircle className="h-5 w-5 text-red-500" />;
-    return <CheckCircle className="h-5 w-5 text-green-500" />;
-  };
-
-  const getAlertVariant = () => {
-    if (isFake) return "destructive";
-    return "default";
-  };
-
-  const getTitle = () => {
-    if (isFake) return "High Risk";
-    return "Low Risk";
-  };
-
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Analysis Results</h2>
@@ -46,10 +31,7 @@ export function BinaryDisplay({ isFake }: BinaryDisplayProps) {
         </div>
       </div>
 
-      <Alert variant={getAlertVariant()}>
-        {getIcon()}
-        <AlertTitle>{getTitle()}</AlertTitle>
-      </Alert>
+      {isFake ? <BadAlert /> : <GoodAlert />}
 
       <div className="text-sm text-muted-foreground">
         <p className="mb-2">
@@ -61,5 +43,25 @@ export function BinaryDisplay({ isFake }: BinaryDisplayProps) {
         </p>
       </div>
     </div>
+  );
+}
+
+function BadAlert() {
+  return (
+    <Alert variant="destructive">
+      <AlertCircle className="h-5 w-5 text-red-500" />
+      <AlertTitle>High Risk</AlertTitle>
+      <p>This article is likely to contain fake news.</p>
+    </Alert>
+  );
+}
+
+function GoodAlert() {
+  return (
+    <Alert variant="default">
+      <CheckCircle className="h-5 w-5 text-green-500" />
+      <AlertTitle>Low Risk</AlertTitle>
+      <p>This article is likely to be reliable.</p>
+    </Alert>
   );
 }
