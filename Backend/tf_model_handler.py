@@ -4,38 +4,32 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 def load_model_and_tokenizer(model_path, tokenizer_path):
-    # Load trained model
     model = load_model(model_path)
-    print("Model loaded successfully.")
 
-    # Load tokenizer
     with open(tokenizer_path, "rb") as handle:
         tokenizer = pickle.load(handle)
-    print("Tokenizer loaded successfully.")
-
     return model, tokenizer
 
 
-def validate_text_content(article: str) -> None:
-    if not article or not article.strip():
+def validate_text_content(article: list, tokenizer) -> None:
+    if not article[0].strip():
         raise ValueError("Article must not be empty.")
-    if not isinstance(article, str):
-        raise TypeError("Article must be a string.")
-    if len(article) > 300:
-        raise ValueError("Article is too long")
+    if not article or len(article) != 1 or not isinstance(article[0], str):
+        raise TypeError("Article must be a list containing one string.")
+    seq = tokenizer.texts_to_sequences(article)
+    if len(seq[0]) > 300:
+        raise ValueError("Article is too long (more than 300 tokens).")
 
 
-def true_or_false(
+def true_or_fake(
             model,
             tokenizer,
             text,
             max_len=300):
-    validate_text_content(text)
+    validate_text_content(text, tokenizer)
 
     seq = tokenizer.texts_to_sequences(text)
     pad = pad_sequences(seq, maxlen=max_len, padding='post')
 
     prediction = model.predict(pad)
-#    return prediction
-    print(prediction[0][0]*100)
-    print("Real News" if prediction[0][0] > 0.5 else "Fake News")
+    return prediction
