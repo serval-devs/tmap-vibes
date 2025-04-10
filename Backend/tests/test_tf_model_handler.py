@@ -63,16 +63,27 @@ def test_result_true():
 
     text = [
         (
-            "NBCNEWS (Guo) - The China Film Administration said it will “moderately” reduce the number of American films it imports, "
-            "state-run broadcaster CCTV News reported today. “The U.S. government’s wrongful imposition of tariffs on China would inevitably "
-            "further reduce domestic audiences’ favorable perception of American movies,” CCTV cited a spokesperson from the agency as saying. "
-            "The agency said it will follow market rules and “moderately” reduce the number of American movie imports. “As the world’s second-"
-            "largest film market, China remains committed to high-level openness and will introduce excellent films from more countries to meet "
-            "market demand,” it said, according to the report. China will reduce import of American movies, continued China, which frequently "
-            "trades places with North America as the world’s largest box office, is a crucial market for Hollywood films. U.S. movies have already "
-            "been declining in popularity in recent years as U.S.-China trade tensions have escalated. There were no Hollywood films among China’s "
-            "10 highest-grossing movies in 2023, in stark contrast to 2012, when seven of the top 10 highest-grossing movies were U.S.-made, according "
-            "to Maoyan, a Chinese movie-ticketing and data platform."
+            "NBCNEWS (Guo) - The China Film Administration said it will "
+            "“moderately” reduce the number of American films it imports, "
+            "state-run broadcaster CCTV News reported today. “The U.S. "
+            "government’s wrongful imposition of tariffs on China would "
+            "inevitably further reduce domestic audiences’ favorable "
+            "perception of American movies,” CCTV cited a spokesperson "
+            "from the agency as saying. The agency said it will follow "
+            "market rules and “moderately” reduce the number of American "
+            "movie imports. “As the world’s second-largest film market, "
+            "China remains committed to high-level openness and will "
+            "introduce excellent films from more countries to meet market "
+            "demand,” it said, according to the report. China will reduce "
+            "import of American movies, continued China, which frequently "
+            "trades places with North America as the world’s largest box "
+            "office, is a crucial market for Hollywood films. U.S. movies "
+            "have already been declining in popularity in recent years as "
+            "U.S.-China trade tensions have escalated. There were no "
+            "Hollywood films among China’s 10 highest-grossing movies in "
+            "2023, in stark contrast to 2012, when seven of the top 10 "
+            "highest-grossing movies were U.S.-made, according to Maoyan, "
+            "a Chinese movie-ticketing and data platform."
         )
     ]
 
@@ -82,12 +93,22 @@ def test_result_true():
         f"Expected prediction to be > 0.8 (True), but got {prediction[0][0]}"
     )
 
+
 def test_result_fake():
     model, tokenizer = load_model_and_tokenizer(
                             "./TensorflowModel/MLModels/FakeTrueModel.keras",
                             "./TensorflowModel/MLModels/tokenizer.pkl")
-    prediction = true_or_fake(model,
+    prediction = true_or_fake(
+                            model,
                             tokenizer,
                             [
-        "THIS IS DEFINITLY NOT FAKE NEWS - SOURCE: TRUST ME BRO"])
-    assert prediction[0][0] < 0.5, f"Expected prediction to be < 0.5 (false), but got {prediction[0][0]}"
+                                (
+                                    "THIS IS DEFINITLY NOT FAKE NEWS"
+                                    " - SOURCE: TRUST ME BRO"
+                                )
+                            ]
+                            )
+    assert prediction[0][0] < 0.5, (
+        f"Expected prediction to be < 0.5 (false), but got "
+        f"{prediction[0][0]}"
+    )
