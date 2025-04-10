@@ -60,12 +60,15 @@ export function FakeNewsDetector() {
       setResult(newResult)
 
       // Create a history item
-      const title = fileName || url || text.substring(0, 30) + "..."
+      const title = text.length > 30 
+        ? text.substring(0, 30) + "..." 
+        : text
+
       const newHistoryItem: HistoryItem = {
         id: uuidv4(),
-        title,
+        title: fileName || title, // Using || since empty string is a valid falsy case
         content: text,
-        url: url || undefined,
+        url,
         timestamp: new Date(),
         result: newResult,
       }
@@ -94,9 +97,8 @@ export function FakeNewsDetector() {
   const handleSelectHistoryItem = (item: HistoryItem) => {
     setSelectedHistoryItem(item)
     setText(item.content)
-    setUrl(item.url ?? "")
+    setUrl(item.url ?? "") // Keep this nullish coalescing as url could be undefined
     setResult(item.result)
-
     setFileName("")
   }
 
@@ -149,9 +151,9 @@ export function FakeNewsDetector() {
                   </Button>
 
                   {/* Consolidated error messages */}
-                  {(validationError || error) && (
+                  {(validationError ?? error) && (
                     <p className="text-sm text-destructive text-center mt-2">
-                      {validationError || error}
+                      {validationError ?? error}
                     </p>
                   )}
                 </form>
