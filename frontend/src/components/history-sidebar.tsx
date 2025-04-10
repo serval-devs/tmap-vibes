@@ -12,21 +12,27 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import { HistoryItem } from "@/lib/history"
+import { useClearHistory, useGetHistory } from "@/hooks/history"
 
 interface HistorySidebarProps {
-  history: HistoryItem[]
   onSelectItem: (item: HistoryItem) => void
-  onClearHistory: () => void
 }
 
-export function HistorySidebar({ history, onSelectItem, onClearHistory }: HistorySidebarProps) {
+export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
+  const { data: history } = useGetHistory()
+  const { mutate: onClearHistory } = useClearHistory()
+
+  if (!history) {
+    return null
+  }
+
   return (
     <Sidebar className="border-r">
       <SidebarHeader className="border-b px-4 py-2">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">History</h2>
           {history.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={onClearHistory} className="h-8 px-2">
+            <Button variant="ghost" size="sm" onClick={() => { onClearHistory() }} className="h-8 px-2">
               <Trash2 className="h-4 w-4" />
               <span className="sr-only">Clear History</span>
             </Button>
