@@ -10,9 +10,10 @@ on:
     branches:
       - main
       - Developing
-      - "bug/T*"
-      - "feature/T*"
-      - "T*" #Delete after merge of T001 and Developing
+      - feature/**
+    paths:
+      - .github/workflows/model-ci.yml
+      - TensorflowModel/**
 
 jobs:
   build:
@@ -34,17 +35,18 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          if exist requirements.txt pip install -r requirements.txt
+          pip install -r requirements.txt -r requirements-dev.txt
         shell: cmd
+        working-directory: ./TensorflowModel
 
       - name: Run Linter (flake8)
         run: |
-          pip install flake8
           flake8 .
         shell: cmd
+        working-directory: ./TensorflowModel
 
       - name: Run Tests (pytest)
         run: |
-          pip install pytest
           pytest --maxfail=1 --disable-warnings -q
         shell: cmd
+        working-directory: ./TensorflowModel
