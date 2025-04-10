@@ -3,10 +3,12 @@ import os
 import pandas as pd
 import pytest
 
+
 sys.path.append(os.path.abspath(
     os.path.join(
         os.path.dirname(__file__), '..')))  # noqa: E402
-from TensorflowModel.tensorflow_model import train_model, read_dataset  # noqa: E402
+from tensorflow_model import train_model, read_dataset  # noqa: E402
+
 
 
 def test_read_dataset_loads_csv_correctly():

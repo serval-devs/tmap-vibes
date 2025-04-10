@@ -11,18 +11,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-
-export interface HistoryItem {
-  id: string
-  title: string
-  content: string
-  url?: string
-  timestamp: Date
-  result: {
-    score: number
-    message: string
-  }
-}
+import { HistoryItem } from "@/lib/history"
 
 interface HistorySidebarProps {
   history: HistoryItem[]
