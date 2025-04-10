@@ -9,11 +9,11 @@ import { useEffect, useRef, useState } from "react";
 
 export function FakeNewsDetector() {
   const [text, setText] = useState("");
-  const [error] = useState<string | null>(null);
 
   const {
     mutate: checkArticle,
     data,
+    error,
     isPending,
     isSuccess,
   } = useCheckArticle();
@@ -79,7 +79,7 @@ export function FakeNewsDetector() {
 
             {error && (
               <div className="bg-destructive/15 border border-destructive text-destructive px-4 py-3 rounded-md">
-                <p className="text-sm">{error}</p>
+                <p className="text-sm">{error.message}</p>
               </div>
             )}
             {data && (
