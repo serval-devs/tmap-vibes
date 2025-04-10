@@ -10,18 +10,23 @@ sys.path.append(os.path.abspath(
 from tensorflow_model import train_model, read_dataset  # noqa: E402
 
 
-
 def test_read_dataset_loads_csv_correctly():
-    test_file = os.path.join(os.path.dirname(__file__), "test_dataset", "True.csv")
+    test_file = os.path.join(
+                            os.path.dirname(__file__),
+                            "test_dataset",
+                            "True.csv"
+                            )
 
     df = read_dataset(test_file)
 
     assert isinstance(df, pd.DataFrame), "Did not return a DataFrame"
     assert "text" in df.columns, "Missing expected 'text' column"
 
+
 def test_read_dataset_raises_error_on_missing_file():
     with pytest.raises(FileNotFoundError):
         read_dataset("non_existent_file.csv")
+
 
 def test_train_model(tmp_path):
     curr_dir = os.path.dirname(__file__)

@@ -17,6 +17,7 @@ def read_dataset(DataPath):
             f"{e}"
         )
 
+
 def write_model(
                 model,
                 tokenizer,
@@ -26,6 +27,7 @@ def write_model(
     model.save(kerasPath)
     with open(tokenizerPath, "wb") as handle:
         pickle.dump(tokenizer, handle)
+
 
 def train_model(
                     FakeDataPath,
@@ -105,8 +107,8 @@ def train_model(
             validation_data=(X_test_pad, y_test))
 
     write_model(
-    model,
-    tokenizer,
-    kerasPath,
-    tokenizerPath
-)
+        model,
+        tokenizer,
+        kerasPath,
+        tokenizerPath
+    )
