@@ -21,6 +21,8 @@ export function FakeNewsDetector() {
   const [history, setHistory] = useState<HistoryItem[]>(() => GetHistory())
   const [selectedHistoryItem, setSelectedHistoryItem] = useState<HistoryItem | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isTextValid, setIsTextValid] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
@@ -127,13 +129,31 @@ export function FakeNewsDetector() {
                     />
                     <ArticleTextBox
                     ref={textAreaRef}
-                    onValueChange={(value: string) => { setText(value) }}
+                    onValueChange={setText}
+                    onValidationChange={setIsTextValid}
+                    onError={setValidationError}
                     fileName={fileName}
+                    currentUrl={url}
                     />
 
-                  <Button type="submit" className="w-full" disabled={isAnalyzing || (!url.trim() && !text.trim())}>
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={
+                      isAnalyzing || 
+                      !isTextValid || // This will be true only when text is valid OR URL is valid (but not both)
+                      (url.trim() !== "" && text.trim() !== "") // Extra check for both being present
+                    }
+                  >
                     {isAnalyzing ? "Analyzing..." : "Analyze Content"}
                   </Button>
+
+                  {/* Consolidated error messages */}
+                  {(validationError || error) && (
+                    <p className="text-sm text-destructive text-center mt-2">
+                      {validationError || error}
+                    </p>
+                  )}
                 </form>
               </CardContent>
             </Card>
@@ -147,9 +167,7 @@ export function FakeNewsDetector() {
             {result && (
               <div
                 ref={resultsRef}
-                className={
-                  selectedHistoryItem ? "opacity-100 transition-opacity" : "animate-in fade-in-50 duration-300"
-                }
+                className={selectedHistoryItem ? "opacity-100 transition-opacity" : "animate-in fade-in-50 duration-300"}
               >
                 <BinaryDisplay isFake={result.score > 0.5} />
               </div>
