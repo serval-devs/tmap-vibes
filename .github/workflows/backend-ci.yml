@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -38,6 +40,13 @@ jobs:
           pip install -r requirements.txt -r requirements-dev.txt
         shell: cmd
         working-directory: ./Backend
+
+      - name: Check if model files exist
+        run: |
+          echo "Checking model and tokenizer files..."
+          ls -l ./TensorflowModel/MLModels/
+          ls -l ./TensorflowModel/MLModels/FakeTrueModel.keras
+          ls -l ./TensorflowModel/MLModels/tokenizer.pkl
 
       - name: Run Linter (flake8)
         run: |
