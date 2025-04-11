@@ -7,15 +7,6 @@ from tensorflow.keras.layers import Embedding, Dense, Flatten
 from sklearn.model_selection import train_test_split
 
 
-def read_dataset(DataPath):    try:
-        return pd.read_csv(DataPath)
-    except Exception as e:
-        raise FileNotFoundError(
-            f"Failed to read real data file from '{DataPath}': "
-            f"{e}"
-        )
-
-
 def write_model(
                 model,
                 tokenizer,
