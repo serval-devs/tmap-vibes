@@ -1,7 +1,5 @@
 import sys
 import os
-import pandas as pd
-import pytest
 
 
 sys.path.append(os.path.abspath(
@@ -33,6 +31,6 @@ def test_train_model_and_save(tmp_path):
                 keras_model_path,
                 tokenizer_path
                 )
-    
+
     assert keras_model_path.exists(), "Model file was not created."
     assert tokenizer_path.exists(), "Tokenizer file was not created."
