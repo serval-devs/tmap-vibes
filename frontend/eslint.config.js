@@ -4,8 +4,10 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import eslintReact from '@eslint-react/eslint-plugin'
+import pluginQuery from '@tanstack/eslint-plugin-query'
 
 export default tseslint.config(
+    ...pluginQuery.configs['flat/recommended'],
     { ignores: ['dist'] },
     {
         extends: [
