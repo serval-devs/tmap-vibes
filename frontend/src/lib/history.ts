@@ -1,13 +1,12 @@
+import { type ArticleCheck } from "@/lib/article"
+
 export interface HistoryItem {
   id: string
   title: string
   content: string
   url?: string
   timestamp: Date
-  result: {
-    score: number
-    message: string
-  }
+  result: ArticleCheck
 }
 
 export function GetHistory(): HistoryItem[] {
@@ -16,13 +15,14 @@ export function GetHistory(): HistoryItem[] {
         return [];
     }
 
-    const parsedHistory: HistoryItem[] = [];
+    let parsedHistory: HistoryItem[] = [];
     try {
-        parsedHistory.push(...(JSON.parse(savedHistory) as HistoryItem[]));
+        parsedHistory = JSON.parse(savedHistory) as HistoryItem[];
     } catch (error) {
-        console.error("Failed to parse history:", error);
+        console.error("Failed to parse history from localStorage:", error);
+        return [];
     }
-
+    
     // Convert string dates back to Date objects
     const historyWithDates = parsedHistory.map((item) => ({
         ...item,
@@ -30,4 +30,11 @@ export function GetHistory(): HistoryItem[] {
     }));
 
     return historyWithDates;
+}
+
+export function AddHistory(historyItem: HistoryItem) {
+    const history = GetHistory();
+    const newHistory = [...history, historyItem];
+
+    localStorage.setItem("fakeNewsHistory", JSON.stringify(newHistory));
 }
