@@ -83,7 +83,7 @@ export function ArticleTextBox({
           placeholder="Paste or type the article text here or drag and drop a file..."
           value={value}
           onChange={handleChange}
-          className={`min-h-[200px] resize-y`}
+          className="min-h-[200px] resize-y"
         />
         <p className="text-xs text-muted-foreground text-right">
           {value.length}/{MAX_LENGTH} characters
