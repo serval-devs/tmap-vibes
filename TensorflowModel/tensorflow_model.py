@@ -10,8 +10,8 @@ from sklearn.model_selection import train_test_split
 def write_model(
                 model,
                 tokenizer,
-                kerasPath="./FakeTrueModel.keras",
-                tokenizerPath="./tokenizer.pkl"
+                kerasPath,
+                tokenizerPath
                 ):
     model.save(kerasPath)
     with open(tokenizerPath, "wb") as handle:
