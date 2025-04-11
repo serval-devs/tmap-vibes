@@ -7,10 +7,8 @@ from tensorflow.keras.layers import Embedding, Dense, Flatten
 from sklearn.model_selection import train_test_split
 
 
-def read_dataset(DataPath):
-    try:
-        df = pd.read_csv(DataPath)
-        return df
+def read_dataset(DataPath):    try:
+        return pd.read_csv(DataPath)
     except Exception as e:
         raise FileNotFoundError(
             f"Failed to read real data file from '{DataPath}': "
@@ -31,13 +29,11 @@ def write_model(
 
 def train_model(
                     FakeDataPath,
-                    TrueDataPath,
-                    kerasPath="./FakeTrueModel.keras",
-                    tokenizerPath="./tokenizer.pkl"):
+                    TrueDataPath):
     # Step 1: Load the dataset
     # Load real and fake news datasets from CSV files
-    df_real = read_dataset(TrueDataPath)
-    df_fake = read_dataset(FakeDataPath)
+    df_real = pd.read_csv(TrueDataPath)
+    df_fake = pd.read_csv(FakeDataPath)
 
     df_real['text'] = df_real['text'].fillna('')
     df_fake['text'] = df_fake['text'].fillna('')
@@ -106,9 +102,4 @@ def train_model(
             batch_size=32,
             validation_data=(X_test_pad, y_test))
 
-    write_model(
-        model,
-        tokenizer,
-        kerasPath,
-        tokenizerPath
-    )
+    return model, tokenizer
