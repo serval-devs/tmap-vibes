@@ -135,7 +135,7 @@ export function FakeNewsDetector() {
                     onValidationChange={setIsTextValid}
                     onError={setValidationError}
                     fileName={fileName}
-                    currentUrl={url}
+                    currentUrl={url} // Add this prop
                     />
 
                   <Button 
@@ -143,8 +143,8 @@ export function FakeNewsDetector() {
                     className="w-full" 
                     disabled={
                       isAnalyzing || 
-                      !isTextValid || // This will be true only when text is valid OR URL is valid (but not both)
-                      (url.trim() !== "" && text.trim() !== "") // Extra check for both being present
+                      !isTextValid || // Disable the button if the text is invalid or if both text and URL are provided
+                      (url.trim() !== "" && text.trim() !== "") // Enforce mutual exclusivity between text and URL
                     }
                   >
                     {isAnalyzing ? "Analyzing..." : "Analyze Content"}

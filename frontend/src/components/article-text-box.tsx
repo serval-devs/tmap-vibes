@@ -6,89 +6,61 @@ const MAX_LENGTH = 5000
 const MIN_LENGTH = 10
 
 interface ArticleTextBoxProps {
-  initialValue?: string
   onValueChange?: (value: string) => void
   onValidationChange?: (isValid: boolean) => void
   fileName?: string
-  placeholder?: string
   ref?: React.Ref<HTMLTextAreaElement>
-  currentUrl?: string // Add this prop
   onError?: (error: string | null) => void
+  currentUrl?: string // Add this prop
 }
 
 export function ArticleTextBox({ 
-  initialValue = "", 
   onValueChange, 
   onValidationChange,
   fileName, 
-  placeholder,
   ref,
-  currentUrl = "", // Add this prop with default
   onError,
+  currentUrl = "", // Add default value
 }: ArticleTextBoxProps) {
-  const [value, setValue] = useState(initialValue)
-  
+  const [value, setValue] = useState("")
+
   const validateInput = useCallback((text: string): boolean => {
-    const validation = () => {
-      const trimmedText = text.trim();
-      const trimmedUrl = currentUrl.trim();
+    const trimmedText = text.trim()
+    const trimmedUrl = currentUrl.trim() // Use currentUrl from props
 
-      // Both text and URL are empty - invalid state
-      if (!trimmedText && !trimmedUrl) {
-        return {
-          error: null,
-          isValid: false
-        }
+    // Always check for mutual exclusivity first
+    if (trimmedText && trimmedUrl) {
+      onError?.("Please provide either article text or URL, not both")
+      onValidationChange?.(false)
+      return false
+    }
+
+    // Only check length if we're using text and not URL
+    if (trimmedText && !trimmedUrl) {
+      if (trimmedText.length < MIN_LENGTH) {
+        onError?.(`Text must be at least ${MIN_LENGTH.toString()} characters`)
+        onValidationChange?.(false)
+        return false
       }
-
-      // Only URL is provided - valid state
-      if (!trimmedText && trimmedUrl) {
-        return {
-          error: null,
-          isValid: true
-        }
-      }
-
-      // Text is provided - check length and URL conflict
-      if (trimmedText) {
-        // Check for URL conflict first
-        if (trimmedUrl) {
-          return {
-            error: "Please provide either article text or URL, not both",
-            isValid: false
-          }
-        }
-
-        // Check length requirements
-        if (trimmedText.length < MIN_LENGTH) {
-          return {
-            error: `Text must be at least ${MIN_LENGTH.toString()} characters`,
-            isValid: false
-          }
-        }
-        if (trimmedText.length > MAX_LENGTH) {
-          return {
-            error: `Text cannot exceed ${MAX_LENGTH.toString()} characters`,
-            isValid: false
-          }
-        }
-      }
-
-      return {
-        error: null,
-        isValid: true
+      if (trimmedText.length > MAX_LENGTH) {
+        onError?.(`Text cannot exceed ${MAX_LENGTH.toString()} characters`)
+        onValidationChange?.(false)
+        return false
       }
     }
 
-    const result = validation()
-    onError?.(result.error)  // Pass error up instead of setting local state
-    onValidationChange?.(result.isValid)
-    return result.isValid
-  }, [currentUrl, onValidationChange, onError])
+    // Valid cases:
+    // 1. Only URL is provided
+    // 2. Only valid text is provided
+    // 3. Nothing is provided (let parent handle this case)
+    onError?.(null)
+    onValidationChange?.(Boolean(trimmedUrl || (trimmedText && trimmedText.length >= MIN_LENGTH)))
+    return true
+  }, [currentUrl, onError, onValidationChange])
 
   const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value
-    setValue(() => newValue)
+    setValue(newValue) // Simplified - no need for functional update
     onValueChange?.(newValue)
     validateInput(newValue)
   }, [validateInput, onValueChange])
@@ -108,7 +80,7 @@ export function ArticleTextBox({
         <Textarea
           ref={ref}
           id="content"
-          placeholder={placeholder ?? "Paste or type the article text here or drag and drop a file..."}
+          placeholder="Paste or type the article text here or drag and drop a file..."
           value={value}
           onChange={handleChange}
           className={`min-h-[200px] resize-y`}
