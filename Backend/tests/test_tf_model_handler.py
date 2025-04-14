@@ -56,9 +56,18 @@ def test_result(
 
 
 def test_result_true():
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    model_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "FakeTrueModel.keras")
+    tokenizer_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "tokenizer.pkl")
     model, tokenizer = load_model_and_tokenizer(
-        "./Backend/MLModels/FakeTrueModel.keras",
-        "./Backend/MLModels/tokenizer.pkl"
+        model_path,
+        tokenizer_path
     )
 
     text = [
@@ -95,9 +104,18 @@ def test_result_true():
 
 
 def test_result_fake():
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    model_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "FakeTrueModel.keras")
+    tokenizer_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "tokenizer.pkl")
     model, tokenizer = load_model_and_tokenizer(
-        "./Backend/MLModels/FakeTrueModel.keras",
-        "./Backend/MLModels/tokenizer.pkl"
+        model_path,
+        tokenizer_path
     )
 
     prediction = true_or_fake(
