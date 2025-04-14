@@ -57,4 +57,4 @@ jobs:
         run: |
           pytest --maxfail=1 --disable-warnings -q
         shell: cmd
-        working-directory: .
+        working-directory: ./Backend
