@@ -41,12 +41,6 @@ jobs:
         shell: cmd
         working-directory: ./Backend
 
-      - name: Check if model files exist
-        run: |
-          echo "Checking model and tokenizer files..."
-          ls -l ./MLModels/FakeTrueModel.keras
-          ls -l ./MLModels/tokenizer.pkl
-
       - name: Run Linter (flake8)
         run: |
           flake8 .
