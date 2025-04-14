@@ -1,14 +1,18 @@
 import { ArticleTextBox } from "@/components/article-text-box";
 import { BinaryDisplay } from "@/components/binary-display";
 import { HistorySidebar } from "@/components/history-sidebar";
+import { type HistoryItem } from "@/lib/history";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { ErrorMessage } from "@/components/ui/error-message";
 import { useCheckArticle } from "@/hooks/api/use-articles";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export function FakeNewsDetector() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState("")
+  const [validationError, setValidationError] = useState<string | null>(null)
+  const [isValid, setIsValid] = useState(false)
 
   const {
     mutate: checkArticle,
@@ -21,7 +25,6 @@ export function FakeNewsDetector() {
   const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Scroll to results section after a short delay to ensure rendering is complete
     const timer = setTimeout(() => {
       resultsRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
@@ -31,6 +34,12 @@ export function FakeNewsDetector() {
     };
   }, [isSuccess]);
 
+  const handleHistorySelect = useCallback((item: HistoryItem) => {
+    setText(item.content);
+    setIsValid(true);
+    setValidationError(null);
+  }, []);
+
   function analyzeContent(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     checkArticle({ content: text });
@@ -39,9 +48,7 @@ export function FakeNewsDetector() {
   return (
     <>
       <HistorySidebar
-        onSelectItem={(item) => {
-          console.log(item);
-        }}
+        onSelectItem={handleHistorySelect}
       />
       <SidebarInset className="flex flex-col items-center">
         <div className="container mx-auto px-4 py-8 w-full">
@@ -61,15 +68,24 @@ export function FakeNewsDetector() {
               <CardContent>
                 <form onSubmit={analyzeContent} className="space-y-6">
                   <ArticleTextBox
+                    currentValue={text}
                     onValueChange={(value: string) => {
                       setText(value);
                     }}
+                    onValidationChange={(valid) => {
+                      setIsValid(valid);
+                    }}
+                    onError={(error) => {
+                      setValidationError(error);
+                    }}
                   />
+
+                  {validationError && <ErrorMessage message={validationError} />}
 
                   <Button
                     type="submit"
                     className="w-full"
-                    disabled={isPending || !text.trim()}
+                    disabled={isPending || !text.trim() || !isValid}
                   >
                     {isPending ? "Analyzing..." : "Analyze Content"}
                   </Button>
