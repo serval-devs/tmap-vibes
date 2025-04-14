@@ -6,25 +6,30 @@ const MAX_LENGTH = 300
 const MIN_LENGTH = 1
 
 interface ArticleTextBoxProps {
-  defaultValue?: string
+  currentValue?: string
   onValueChange?: (value: string) => void
   onValidationChange?: (isValid: boolean) => void
   onError?: (error: string | null) => void
 }
 
 export function ArticleTextBox({ 
-  defaultValue = "",
+  currentValue = "",
   onValueChange, 
   onValidationChange,
   onError,
 }: ArticleTextBoxProps) {
-  const [value, setValue] = useState(defaultValue)
+  const [value, setValue] = useState(currentValue)
 
   const validateInput = useCallback((text: string): boolean => {
     const trimmedText = text.trim()
     
     if (trimmedText.length > MAX_LENGTH) {
       onError?.(`Text cannot exceed ${String(MAX_LENGTH)} characters`)
+      onValidationChange?.(false)
+      return false
+    }
+    if(trimmedText.length < MIN_LENGTH) {
+      onError?.(`Text must be at least ${String(MIN_LENGTH)} characters`)
       onValidationChange?.(false)
       return false
     }
@@ -43,11 +48,11 @@ export function ArticleTextBox({
 
   // Initial validation and sync with defaultValue
   useEffect(() => {
-    if (defaultValue !== value) {
-      setValue(defaultValue)
-      validateInput(defaultValue)
+    if (currentValue !== value) {
+      setValue(currentValue)
+      validateInput(currentValue)
     }
-  }, [defaultValue, value, validateInput])
+  }, [currentValue, value, validateInput])
 
   return (
     <div className="space-y-4">

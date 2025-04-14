@@ -68,7 +68,7 @@ export function FakeNewsDetector() {
               <CardContent>
                 <form onSubmit={analyzeContent} className="space-y-6">
                   <ArticleTextBox
-                    defaultValue={text}
+                    currentValue={text}
                     onValueChange={(value: string) => {
                       setText(value);
                     }}
