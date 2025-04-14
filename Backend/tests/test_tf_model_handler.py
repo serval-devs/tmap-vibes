@@ -57,8 +57,8 @@ def test_result(
 
 def test_result_true():
     model, tokenizer = load_model_and_tokenizer(
-        os.path.abspath("./MLModels/FakeTrueModel.keras"),
-        os.path.abspath("./MLModels/tokenizer.pkl")
+        "./Backend/MLModels/FakeTrueModel.keras",
+        "./Backend/MLModels/tokenizer.pkl"
     )
 
     text = [
@@ -96,8 +96,8 @@ def test_result_true():
 
 def test_result_fake():
     model, tokenizer = load_model_and_tokenizer(
-        os.path.abspath("./MLModels/FakeTrueModel.keras"),
-        os.path.abspath("./MLModels/tokenizer.pkl")
+        "./Backend/MLModels/FakeTrueModel.keras",
+        "./Backend/MLModels/tokenizer.pkl"
     )
 
     prediction = true_or_fake(
