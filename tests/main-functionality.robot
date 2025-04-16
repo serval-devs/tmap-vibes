@@ -3,13 +3,13 @@ Documentation     Test suite to check article analysis functionality
 Library           SeleniumLibrary
 
 *** Variables ***
-${URL}            http://localhost:5173/
+${URL}            http://localhost:5175/
 ${BROWSER}        Chrome
 ${TEXTFIELD_ID}   id:content
 ${CHECK_BUTTON}   id:analyze-button
 ${FAKE_CONFIDENCE_SELECTOR}   id:confidence-percentage
 ${RISK_LABEL}    xpath=//*[text()='Low Risk' or text()='Medium Risk' or text()='High Risk']
-${HISTORY_MATCH}    id:history-first-item
+${HISTORY_ITEM}    id:history-first-item
 
 *** Test Cases ***
 Check Article Text Can Be Submitted and Analyzed
