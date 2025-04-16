@@ -51,10 +51,10 @@ jobs:
         run: |
           coverage run --source=. -m pytest --maxfail=1 --disable-warnings -q
         shell: cmd
-        working-directory: ./TensorflowModel
+        working-directory: ./Backend
       
       - name: Show Coverage Report
         run: |
           coverage report -m
         shell: cmd
-        working-directory: ./TensorflowModel
+        working-directory: ./Backend
