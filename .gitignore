@@ -6,3 +6,9 @@ node_modules/
 # Python virtual environment
 vibe/
 venv/
+
+# Robot framework
+*.log
+*.xml
+*.html
+*.png
