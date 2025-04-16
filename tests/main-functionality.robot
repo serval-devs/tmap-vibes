@@ -23,7 +23,7 @@ Check Article Text Can Be Submitted and Analyzed
     Wait Until Element Is Visible    ${CHECK_BUTTON}
     Click Element    ${CHECK_BUTTON}
 
-    Wait Until Page Contains Element    ${FAKE_CONFIDENCE_SELECTOR}    timeout=10s
+    Wait Until Page Contains Element    ${FAKE_CONFIDENCE_SELECTOR}    timeout=5s
     Element Should Be Visible           ${FAKE_CONFIDENCE_SELECTOR}
     ${confidence}    Get Text           ${FAKE_CONFIDENCE_SELECTOR}
     Log    Fake News Confidence: ${confidence}
