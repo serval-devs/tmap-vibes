@@ -1,6 +1,7 @@
 export interface Article {
-    title?: string;
-    content: string;
+  content: string
+  author?: string
+  website?: string
 };
 
 export interface ArticleCheck {
