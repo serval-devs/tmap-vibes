@@ -82,7 +82,7 @@ export function FakeNewsDetector() {
 
                   {validationError && <ErrorMessage message={validationError} />}
 
-                  <Button
+                  <Button id="analyze-button"
                     type="submit"
                     className="w-full"
                     disabled={isPending || !text.trim() || !isValid}
