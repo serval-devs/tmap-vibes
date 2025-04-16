@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(
 from tf_model_handler import (  # noqa: E402
     load_model_and_tokenizer,  # noqa: E402
     true_or_fake,  # noqa: E402
-    validate_text_content # noqa: E402
+    validate_text_content  # noqa: E402
 )  # noqa: E402
 
 
@@ -135,11 +135,13 @@ def test_result_fake():
         f"{prediction[0][0]}"
     )
 
+
 def test_valid_article():
     tokenizer = MagicMock()
     tokenizer.texts_to_sequences.return_value = [[1, 2, 3]]
     article = ["This is valid."]
     assert validate_text_content(article, tokenizer) is None
+
 
 def test_empty_article_string():
     tokenizer = MagicMock()
@@ -147,11 +149,13 @@ def test_empty_article_string():
     with pytest.raises(ValueError, match="Article must not be empty."):
         validate_text_content(article, tokenizer)
 
+
 def test_article_not_a_list():
     tokenizer = MagicMock()
     article = "This is a string, not a list."
     with pytest.raises(TypeError):
         validate_text_content(article, tokenizer)
+
 
 def test_article_list_with_multiple_items():
     tokenizer = MagicMock()
@@ -159,11 +163,13 @@ def test_article_list_with_multiple_items():
     with pytest.raises(TypeError):
         validate_text_content(article, tokenizer)
 
+
 def test_article_not_string():
     tokenizer = MagicMock()
     article = [123]
     with pytest.raises(TypeError):
         validate_text_content(article, tokenizer)
+
 
 def test_article_too_long():
     tokenizer = MagicMock()
