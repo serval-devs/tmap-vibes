@@ -41,7 +41,7 @@ export function ArticleTextBox({
     }
 
     if (wordCount < MIN_WORDS) {
-      onError?.(`Text must be at least ${String(MIN_WORDS)} word`)
+      onError?.(`Text must be at least ${String(MIN_WORDS)} words`)
       onValidationChange?.(false)
       return false
     }
