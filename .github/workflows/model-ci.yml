@@ -45,8 +45,14 @@ jobs:
         shell: cmd
         working-directory: ./TensorflowModel
 
-      - name: Run Tests (pytest)
+      - name: Run Coverage (pytest with coverage)
         run: |
-          pytest --maxfail=1 --disable-warnings -q
+          coverage run --source=. -m pytest --maxfail=1 --disable-warnings -q
+        shell: cmd
+        working-directory: ./TensorflowModel
+      
+      - name: Show Coverage Report
+        run: |
+          coverage report -m
         shell: cmd
         working-directory: ./TensorflowModel

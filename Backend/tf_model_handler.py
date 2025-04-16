@@ -12,10 +12,10 @@ def load_model_and_tokenizer(model_path, tokenizer_path):
 
 
 def validate_text_content(article: list, tokenizer) -> None:
-    if not article[0].strip():
-        raise ValueError("Article must not be empty.")
     if not article or len(article) != 1 or not isinstance(article[0], str):
         raise TypeError("Article must be a list containing one string.")
+    if not article[0].strip():
+        raise ValueError("Article must not be empty.")
     seq = tokenizer.texts_to_sequences(article)
     if len(seq[0]) > 300:
         raise ValueError("Article is too long (more than 300 tokens).")
