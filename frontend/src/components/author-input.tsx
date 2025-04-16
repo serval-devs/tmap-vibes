@@ -14,7 +14,9 @@ export function AuthorInput({ value, onChange }: AuthorInputProps) {
         id="author"
         placeholder="Article author..."
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+        }}
       />
     </div>
   )

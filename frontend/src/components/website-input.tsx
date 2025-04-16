@@ -14,7 +14,9 @@ export function WebsiteInput({ value, onChange }: WebsiteInputProps) {
         id="website"
         placeholder="Source website..."
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+        }}
       />
     </div>
   )
