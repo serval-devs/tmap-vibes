@@ -7,27 +7,24 @@ from tensorflow.keras.layers import Embedding, Dense, Flatten
 from sklearn.model_selection import train_test_split
 
 
-def create_new_model(
+def write_model(
+                model,
+                tokenizer,
+                kerasPath,
+                tokenizerPath
+                ):
+    model.save(kerasPath)
+    with open(tokenizerPath, "wb") as handle:
+        pickle.dump(tokenizer, handle)
+
+
+def train_model(
                     FakeDataPath,
-                    TrueDataPath,
-                    kerasPath="./MLModels/FakeTrueModel.keras",
-                    tokenizerPath="./MLModels/tokenizer.pkl"):
+                    TrueDataPath):
     # Step 1: Load the dataset
     # Load real and fake news datasets from CSV files
-    try:
-        df_real = pd.read_csv(TrueDataPath)
-    except Exception as e:
-        raise FileNotFoundError(
-            f"Failed to read real data file from '{TrueDataPath}': "
-            f"{e}"
-        )
-    try:
-        df_fake = pd.read_csv(FakeDataPath)
-    except Exception as e:
-        raise FileNotFoundError(
-            f"Failed to read real data file from '{FakeDataPath}': "
-            f"{e}"
-        )
+    df_real = pd.read_csv(TrueDataPath)
+    df_fake = pd.read_csv(FakeDataPath)
 
     df_real['text'] = df_real['text'].fillna('')
     df_fake['text'] = df_fake['text'].fillna('')
@@ -96,12 +93,4 @@ def create_new_model(
             batch_size=32,
             validation_data=(X_test_pad, y_test))
 
-    # Step 6: Evaluate the model
-    test_loss, test_acc = model.evaluate(X_test_pad, y_test)
-    print(f'Test Accuracy: {test_acc*100:.2f}%')
-
-    model.save(kerasPath)
-    print("Model saved as FakeTrueModel.keras")
-    with open(tokenizerPath, "wb") as handle:
-        pickle.dump(tokenizer, handle)
-        print("Tokenizer saved as tokenizer.pkl")
+    return model, tokenizer

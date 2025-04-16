@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(
         os.path.dirname(__file__), '..')))  # noqa: E402
 from tf_model_handler import (  # noqa: E402
     load_model_and_tokenizer,  # noqa: E402
-    quick_test  # noqa: E402
+    true_or_fake  # noqa: E402
 )  # noqa: E402
 
 
@@ -37,7 +37,8 @@ def test_load_model_and_tokenizer(
 
 @patch("tf_model_handler.load_model_and_tokenizer")
 @patch("tf_model_handler.pad_sequences")
-def test_quick_test(
+def test_result(
+
                     mock_pad_sequences,
                     mock_load_model_and_tokenizer):
     mock_model = MagicMock()
@@ -49,4 +50,85 @@ def test_quick_test(
 
     mock_model.predict.return_value = [[0.9]]
 
-    quick_test(mock_model, mock_tokenizer)
+    text = ["Example input text"]
+
+    true_or_fake(mock_model, mock_tokenizer, text)
+
+
+def test_result_true():
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    model_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "FakeTrueModel.keras")
+    tokenizer_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "tokenizer.pkl")
+    model, tokenizer = load_model_and_tokenizer(
+        model_path,
+        tokenizer_path
+    )
+
+    text = [
+        (
+            "NBCNEWS (Guo) - The China Film Administration said it will "
+            "“moderately” reduce the number of American films it imports, "
+            "state-run broadcaster CCTV News reported today. “The U.S. "
+            "government’s wrongful imposition of tariffs on China would "
+            "inevitably further reduce domestic audiences’ favorable "
+            "perception of American movies,” CCTV cited a spokesperson "
+            "from the agency as saying. The agency said it will follow "
+            "market rules and “moderately” reduce the number of American "
+            "movie imports. “As the world’s second-largest film market, "
+            "China remains committed to high-level openness and will "
+            "introduce excellent films from more countries to meet market "
+            "demand,” it said, according to the report. China will reduce "
+            "import of American movies, continued China, which frequently "
+            "trades places with North America as the world’s largest box "
+            "office, is a crucial market for Hollywood films. U.S. movies "
+            "have already been declining in popularity in recent years as "
+            "U.S.-China trade tensions have escalated. There were no "
+            "Hollywood films among China’s 10 highest-grossing movies in "
+            "2023, in stark contrast to 2012, when seven of the top 10 "
+            "highest-grossing movies were U.S.-made, according to Maoyan, "
+            "a Chinese movie-ticketing and data platform."
+        )
+    ]
+
+    prediction = true_or_fake(model, tokenizer, text)
+
+    assert prediction[0][0] > 0.8, (
+        f"Expected prediction to be > 0.8 (True), but got {prediction[0][0]}"
+    )
+
+
+def test_result_fake():
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    model_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "FakeTrueModel.keras")
+    tokenizer_path = os.path.join(
+                            root_dir,
+                            "MLModels",
+                            "tokenizer.pkl")
+    model, tokenizer = load_model_and_tokenizer(
+        model_path,
+        tokenizer_path
+    )
+
+    prediction = true_or_fake(
+                            model,
+                            tokenizer,
+                            [
+                                (
+                                    "THIS IS DEFINITLY NOT FAKE NEWS"
+                                    " - SOURCE: TRUST ME BRO"
+                                )
+                            ]
+                            )
+    assert prediction[0][0] < 0.5, (
+        f"Expected prediction to be < 0.5 (false), but got "
+        f"{prediction[0][0]}"
+    )
