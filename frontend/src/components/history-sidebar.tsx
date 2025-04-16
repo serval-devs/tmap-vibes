@@ -63,7 +63,7 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
                         <div
                           className={`absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full ${getScoreColor()}`}
                         />
-                        <div className="flex flex-col items-start">
+                        <div id="history-first-item" className="flex flex-col items-start">
                           <span className="font-medium line-clamp-1">{item.title}</span>
                           <div className="flex items-center text-xs text-muted-foreground">
                             <Clock className="mr-1 h-3 w-3" />
