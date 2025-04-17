@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import random
 app = Flask(__name__)
 
+
 @app.route('/v1', methods=['POST'])
 def check_article():
 
@@ -40,5 +41,3 @@ def health_check():
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
-
-
