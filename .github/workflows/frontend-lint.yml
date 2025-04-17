@@ -57,7 +57,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install Drivers
-        run: webdrivermanager edge
+        run: webdrivermanager firefox
 
       - name: Run Frontend
         working-directory: ./frontend
