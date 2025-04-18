@@ -33,9 +33,6 @@ export function AuthorInput({ value, onChange }: AuthorInputProps) {
     
     onChange(newText)
   }, [onChange, countWords])
-
-  const wordCount = countWords(value)
-  const charCount = value.length
   
   return (
     <div className="space-y-2">
