@@ -42,7 +42,7 @@ export function ConfidenceDisplay({ score, message }: ConfidenceDisplayProps) {
       <div className="space-y-2">
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium">Fake News Confidence</span>
-          <span className="text-sm font-bold">{percentage}%</span>
+          <span id="confidence-percentage" className="text-sm font-bold">{percentage}%</span>
         </div>
         <div className="relative h-4 w-full overflow-hidden rounded-full bg-secondary">
           <div
