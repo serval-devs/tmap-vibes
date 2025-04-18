@@ -2,8 +2,10 @@ import { type ChangeEvent, useState, useEffect, useCallback } from "react"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-const MAX_WORDS = 300
+const MAX_WORDS = 300 // Limit for validation/submission
 const MIN_WORDS = 1
+const MAX_CHARS = 3000 // Character limit for the textarea
+const PASTE_WORDS_LIMIT = 500 // Hard limit for pasting too much text
 
 interface ArticleTextBoxProps {
   currentValue?: string
@@ -27,6 +29,7 @@ export function ArticleTextBox({
   const validateInput = useCallback((text: string): boolean => {
     const wordCount = countWords(text)
     const trimmedText = text.trim()
+    const charCount = text.length
 
     if (!trimmedText) {
       onError?.("Text is required")
@@ -34,14 +37,20 @@ export function ArticleTextBox({
       return false
     }
     
+    if (charCount > MAX_CHARS) {
+      onError?.(`Text cannot exceed ${String(MAX_CHARS)} characters`)
+      onValidationChange?.(false)
+      return false
+    }
+    
     if (wordCount > MAX_WORDS) {
-      onError?.(`Text cannot exceed ${String(MAX_WORDS)} words`)
+      onError?.(`Text cannot exceed ${String(MAX_WORDS)} words for analysis`)
       onValidationChange?.(false)
       return false
     }
 
     if (wordCount < MIN_WORDS) {
-      onError?.(`Text must be at least ${String(MIN_WORDS)} words`)
+      onError?.(`Text must be at least ${String(MIN_WORDS)} word`)
       onValidationChange?.(false)
       return false
     }
@@ -52,24 +61,58 @@ export function ArticleTextBox({
   }, [onError, onValidationChange, countWords])
 
   const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
-    const newValue = e.target.value
+    let newValue = e.target.value
+
+    // First limit by characters
+    if (newValue.length > MAX_CHARS) {
+      newValue = newValue.slice(0, MAX_CHARS)
+    }
+    
+    // Then check word count for pasting large amounts
+    const wordCount = countWords(newValue)
+    if (wordCount > PASTE_WORDS_LIMIT) {
+      // If pasting too much, truncate to the PASTE_WORDS_LIMIT
+      const words = newValue.trim().split(/\s+/).filter(word => word.length > 0)
+      newValue = words.slice(0, PASTE_WORDS_LIMIT).join(' ')
+    }
+    
     setValue(newValue)
     onValueChange?.(newValue)
     validateInput(newValue)
-  }, [onValueChange, validateInput])
+  }, [onValueChange, validateInput, countWords])
 
   // Initial validation and sync with defaultValue
   useEffect(() => {
     if (currentValue !== value) {
-      setValue(currentValue)
-      validateInput(currentValue)
+      // Apply the same limits to incoming values
+      let newValue = currentValue
+      
+      if (newValue.length > MAX_CHARS) {
+        newValue = newValue.slice(0, MAX_CHARS)
+      }
+      
+      const wordCount = countWords(newValue)
+      if (wordCount > PASTE_WORDS_LIMIT) {
+        const words = newValue.trim().split(/\s+/).filter(word => word.length > 0)
+        newValue = words.slice(0, PASTE_WORDS_LIMIT).join(' ')
+      }
+      //eslint-disable-next-line
+      setValue(newValue) 
+      validateInput(newValue)
     }
-  }, [currentValue, value, validateInput])
+  }, [currentValue, value, validateInput, countWords])
+
+  const wordCount = countWords(value)
+  const charCount = value.length
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <Label htmlFor="content">Article Text</Label>
+        <Label htmlFor="content">
+          Article Text 
+          <span className="ml-2 text-xs text-muted-foreground">
+          </span>
+        </Label>
       </div>
       <Textarea
         id="content"
@@ -77,16 +120,19 @@ export function ArticleTextBox({
         value={value}
         onChange={handleChange}
         className="min-h-[200px] resize-y"
+        maxLength={MAX_CHARS}
       />
-      <div className="flex justify-end items-center text-xs">
+      <div className="flex justify-between items-center text-xs">
+        <span className={charCount > MAX_CHARS ? 'text-destructive' : 'text-muted-foreground'}>
+        </span>
         <span className={`
-          ${countWords(value) > MAX_WORDS 
+          ${wordCount > MAX_WORDS 
             ? 'text-destructive' 
-            : countWords(value) < MIN_WORDS 
+            : wordCount < MIN_WORDS 
               ? 'text-warning' 
               : 'text-primary'
-        }`}>
-          {countWords(value)}/{MAX_WORDS}
+          }`}>
+          {wordCount}/{MAX_WORDS} words
         </span>
       </div>
     </div>
