@@ -8,11 +8,15 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ErrorMessage } from "@/components/ui/error-message";
 import { useCheckArticle } from "@/hooks/api/use-articles";
 import { useEffect, useRef, useState, useCallback } from "react";
+import { AuthorInput } from "@/components/author-input"
+import { WebsiteInput } from "@/components/website-input"
 
 export function FakeNewsDetector() {
   const [text, setText] = useState("")
   const [validationError, setValidationError] = useState<string | null>(null)
   const [isValid, setIsValid] = useState(false)
+  const [author, setAuthor] = useState("")
+  const [website, setWebsite] = useState("")
 
   const {
     mutate: checkArticle,
@@ -36,13 +40,19 @@ export function FakeNewsDetector() {
 
   const handleHistorySelect = useCallback((item: HistoryItem) => {
     setText(item.content);
+    setAuthor("");
+    setWebsite("");
     setIsValid(true);
     setValidationError(null);
   }, []);
 
   function analyzeContent(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    checkArticle({ content: text });
+    checkArticle({ 
+      content: text,
+      author: author.trim(),
+      website: website.trim()
+    });
   }
 
   return (
@@ -67,6 +77,17 @@ export function FakeNewsDetector() {
               </CardHeader>
               <CardContent>
                 <form onSubmit={analyzeContent} className="space-y-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    <AuthorInput 
+                      value={author}
+                      onChange={setAuthor}
+                    />
+                    <WebsiteInput
+                      value={website}
+                      onChange={setWebsite}
+                    />
+                  </div>
+
                   <ArticleTextBox
                     currentValue={text}
                     onValueChange={(value: string) => {

@@ -37,18 +37,18 @@ export function useCheckArticle() {
 
     // Save the result to history after the mutation is successful.
     onSuccess: async ({ article, result }) => {
-      const title = article.title ?? article.content.substring(0, 30) + "...";
-
-      const newHistoryItem: HistoryItem = {
+      const title = article.content.substring(0, 30) + "..."
+      
+      const historyItem: HistoryItem = {
         id: uuidv4(),
         title,
         content: article.content,
-        url: undefined,
+        url: article.website,
         timestamp: new Date(),
         result,
-      };
+      }
 
-      await addHistory(newHistoryItem);
+      await addHistory(historyItem)
     },
-  });
+  })
 }
