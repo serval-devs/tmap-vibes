@@ -22,7 +22,7 @@ def check_article():
         return response
 
     if len(data[content]) < 10:
-        response = jsonify({"error": f"{content} cannot be empty or less than 10"})
+        response = jsonify({"error": "Cannot be empty or less than 10"})
         response.status_code = 400
         response.headers["Error-Type"] = "InvalidType"
         return response
@@ -35,9 +35,11 @@ def check_article():
         "confidence": confidence
     }), 200
 
+
 @app.route('/', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy"}), 200
+
 
 
 # if __name__ == '__main__':
