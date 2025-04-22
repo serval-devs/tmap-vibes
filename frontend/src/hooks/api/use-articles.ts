@@ -1,11 +1,36 @@
 import { Article, ArticleCheck } from "@/lib/article";
-import { HistoryItem } from "@/lib/history";
-import { useMutation } from "@tanstack/react-query";
+import { GetSelectedItem, HistoryItem } from "@/lib/history";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { useAddHistory } from "@/hooks/use-history";
 
+export function useGetArticle() {
+  return useQuery({
+    queryKey: ["getArticle"],
+    queryFn: () => {
+      return GetSelectedItem();
+    },
+  });
+}
+
+export function useSetArticle() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["setArticle"],
+    mutationFn: (historyItem: HistoryItem) => {
+      localStorage.setItem("fakeNewsSelectedItem", JSON.stringify(historyItem));
+      return Promise.resolve();
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ["getArticle"] });
+    },
+  });
+}
+
 export function useCheckArticle() {
   const { mutateAsync: addHistory } = useAddHistory();
+  const { mutateAsync: setHistoryItem } = useSetArticle();
 
   return useMutation({
     mutationKey: ["checkArticle"],
@@ -37,18 +62,18 @@ export function useCheckArticle() {
 
     // Save the result to history after the mutation is successful.
     onSuccess: async ({ article, result }) => {
-      const title = article.content.substring(0, 30) + "..."
-      
+      const title = article.content.substring(0, 30) + "...";
+
       const historyItem: HistoryItem = {
         id: uuidv4(),
         title,
-        content: article.content,
-        url: article.website,
+        article,
         timestamp: new Date(),
         result,
-      }
+      };
 
-      await addHistory(historyItem)
+      await addHistory(historyItem);
+      await setHistoryItem(historyItem);
     },
-  })
+  });
 }

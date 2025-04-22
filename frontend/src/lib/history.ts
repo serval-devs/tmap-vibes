@@ -1,10 +1,9 @@
-import { type ArticleCheck } from "@/lib/article"
+import { type Article, type ArticleCheck } from "@/lib/article"
 
 export interface HistoryItem {
   id: string
   title: string
-  content: string
-  url?: string
+  article: Article
   timestamp: Date
   result: ArticleCheck
 }
@@ -37,4 +36,25 @@ export function AddHistory(historyItem: HistoryItem) {
     const newHistory = [...history, historyItem];
 
     localStorage.setItem("fakeNewsHistory", JSON.stringify(newHistory));
+}
+
+export function GetSelectedItem() {
+    const savedHistory = localStorage.getItem("fakeNewsSelectedItem");
+    if (!savedHistory) {
+        return null;
+    }
+
+    let parsedHistory: HistoryItem | null = null;
+    try {
+        parsedHistory = JSON.parse(savedHistory) as HistoryItem;
+    } catch (error) {
+        console.error("Failed to parse selected item from localStorage:", error);
+        return null;
+    }
+
+    return parsedHistory;
+}
+
+export function SetSelectedItem(historyItem: HistoryItem) {
+    localStorage.setItem("fakeNewsSelectedItem", JSON.stringify(historyItem));
 }
