@@ -1,12 +1,10 @@
+from app import app
 import unittest
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from app import app
-
 
 class FlaskAppTestCase(unittest.TestCase):
-
 
     def setUp(self):
         self.app = app.test_client()
@@ -41,10 +39,11 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("isReal", response.json)
         self.assertIn("confidence", response.json)
-        self.assertTrue(50 <= response.json["confidence"] <= 99)
+        self.assertTrue(50 <= response.json["confidence"] <= 99)    
 
 if __name__ == '__main__':
     unittest.main()
+
 
 
 
