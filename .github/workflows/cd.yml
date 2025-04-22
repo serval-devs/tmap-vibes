@@ -16,8 +16,15 @@ jobs:
           tags: tag:dev-ci
           use-cache: true
 
-      - name: echo in prod
+      - name: deploy backend
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.TS_TMAP }} "
-            echo 'hello world'
+            tmux kill-session -t backend
+            tmux new-session -d -s backend ./deploy-backend.sh
+          "
+      - name: deploy frontend
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.TS_TMAP }} "
+            tmux kill-session -t frontend
+            tmux new-session -d -s frontend ./deploy-frontend.sh
           "

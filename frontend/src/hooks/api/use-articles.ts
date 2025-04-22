@@ -4,7 +4,10 @@ import { useMutation } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { useAddHistory } from "@/hooks/use-history";
 
-const apiUrl = "http://localhost:5000/api/v1";
+let apiUrl = "http://localhost:5000/api/v1";
+if (import.meta.env.MODE === "production") {
+  apiUrl = "https://api.altran.rip/api/v1";
+}
 
 export function useCheckArticle() {
   const { mutateAsync: addHistory } = useAddHistory();
