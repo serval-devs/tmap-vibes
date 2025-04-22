@@ -1,9 +1,8 @@
-from app import app
 import unittest
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+from app import app
 
 class FlaskAppTestCase(unittest.TestCase):
 
@@ -37,7 +36,7 @@ class FlaskAppTestCase(unittest.TestCase):
 
     def test_valid_request(self):
         valid_content = "This is a sufficiently long content."
-        response = self.app.post('/api/v1/articles1',
+        response = self.app.post('/api/v1/articles',
                                  json={"content": valid_content})
         self.assertEqual(response.status_code, 200)
         self.assertIn("isReal", response.json)

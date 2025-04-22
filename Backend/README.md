@@ -6,7 +6,7 @@ Capgemini TMAP training march 2025
 # Setup
 
 # Python venv activation
-    venv\Scripts\activate.bat
+    .\venv\Scripts\activate
 
 # Activate the environment:
     $env:FLASK_APP = "app.py"
