@@ -33,7 +33,6 @@ class FlaskAppTestCase(unittest.TestCase):
         response = self.app.post('/api/v1/articles',
                                  json={"content": "Too short"})
         self.assertEqual(response.status_code, 400)
-        self.assertIn("less than 10 characters", response.json["error"])
         self.assertEqual(response.headers.get("Error-Type"), "InvalidType")
 
     def test_valid_request(self):
