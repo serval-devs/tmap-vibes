@@ -8,6 +8,9 @@ Capgemini TMAP training march 2025
 # Python venv activation
 python -m venv venv
 .\venv\Scripts\activate
+python -m pip install --upgrade pip  
+go to tmap-vibes\Backend 
+pip install -r requirements.txt
 
 # Activate the environment:
 $env:FLASK_APP = "app.py"
