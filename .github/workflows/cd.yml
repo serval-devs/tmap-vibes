@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - main
+      - feature/cd # To be removed
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect to tailnet
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_AUTH_KEY }}
+          tags: tag:dev-ci
+          use-cache: true
+
+      - name: echo in prod
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.TS_TMAP }} "
+            echo 'hello world'
+          "
