@@ -21,10 +21,8 @@ export function FakeNewsDetector() {
 
   const {
     mutate: checkArticle,
-    data,
     error,
     isPending,
-    isSuccess,
   } = useCheckArticle();
 
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -37,7 +35,7 @@ export function FakeNewsDetector() {
     return () => {
       clearTimeout(timer);
     };
-  }, [isSuccess]);
+  }, [selectedItem]);
 
   function handleHistorySelect(item: HistoryItem) {
     setText(item.article.content);
@@ -123,12 +121,12 @@ export function FakeNewsDetector() {
                 <p className="text-sm">{error.message}</p>
               </div>
             )}
-            {data && (
+            {selectedItem && (
               <div
                 ref={resultsRef}
                 className="animate-in fade-in-50 duration-300"
               >
-                <BinaryDisplay isFake={data.result.confidence > 0.5} />
+                <BinaryDisplay isFake={selectedItem.result.confidence > 0.5} />
               </div>
             )}
           </div>
