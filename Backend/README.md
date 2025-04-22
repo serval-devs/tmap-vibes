@@ -6,6 +6,7 @@ Capgemini TMAP training march 2025
 # Setup
 
 # Python venv activation
+python -m venv venv
 .\venv\Scripts\activate
 
 # Activate the environment:
