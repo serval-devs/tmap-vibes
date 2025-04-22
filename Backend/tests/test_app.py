@@ -45,5 +45,6 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertIn("confidence", response.json)
         self.assertTrue(50 <= response.json["confidence"] <= 99)
 
+
 if __name__ == '__main__':
     unittest.main()
