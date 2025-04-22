@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 class FlaskAppTestCase(unittest.TestCase):
 
+
     def setUp(self):
         self.app = app.test_client()
         self.app.testing = True
@@ -41,8 +42,10 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertIn("confidence", response.json)
         self.assertTrue(50 <= response.json["confidence"] <= 99)    
 
+
 if __name__ == '__main__':
     unittest.main()
+
 
 
 
