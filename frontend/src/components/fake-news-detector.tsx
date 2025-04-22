@@ -69,6 +69,13 @@ export function FakeNewsDetector() {
           <p className="text-muted-foreground mb-8">
             Analyze articles to determine if they might contain fake news.
           </p>
+           <div className="text-sm text-muted-foreground border border-dashed border-muted-foreground/50 p-4 rounded-md mb-8 max-w-2xl mx-auto">
+             <p className="font-semibold mb-2">DISCLAIMER</p>
+             <p>
+              This tool is designed for use with only American English articles. It is not
+              intended for use with any other language or dialect. The results are not guaranteed.
+             </p>
+          </div>
 
           <div className="space-y-8">
             <Card className="w-full max-w-2xl mx-auto">
