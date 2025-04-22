@@ -23,37 +23,31 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertEqual(response.headers.get("Error-Type"), "InvalidFormat")
 
     def test_missing_content_field(self):
-        response = self.app.post('/api/v1/articles1', json={"title": "Fake News"})
+        response = self.app.post('/api/v1/articles1',
+                                  json={"title": "Fake News"})
         self.assertEqual(response.status_code, 400)
         self.assertIn("Missing content", response.json["error"])
         self.assertEqual(response.headers.get("Error-Type"), "MissingField")
 
     def test_content_too_short(self):
-        response = self.app.post('/api/v1/articles', json={"content": "Too short"})
+        response = self.app.post('/api/v1/articles',
+                                  json={"content": "Too short"})
         self.assertEqual(response.status_code, 400)
         self.assertIn("less than 10 characters", response.json["error"])
         self.assertEqual(response.headers.get("Error-Type"), "InvalidType")
 
     def test_valid_request(self):
         valid_content = "This is a sufficiently long content."
-        response = self.app.post('/api/v1/articles1', json={"content": valid_content})
+        response = self.app.post('/api/v1/articles1',
+                                  json={"content": valid_content})
         self.assertEqual(response.status_code, 200)
         self.assertIn("isReal", response.json)
         self.assertIn("confidence", response.json)
+        
         self.assertTrue(50 <= response.json["confidence"] <= 99)    
-
 
 if __name__ == '__main__':
     unittest.main()
-
-
-
-
-
-
-
-
-
 
 
 
