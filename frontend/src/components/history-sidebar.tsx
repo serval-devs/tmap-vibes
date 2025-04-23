@@ -41,7 +41,7 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">History</h2>
           {history.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={() => { onClearHistory() }} className="h-8 px-2">
+            <Button id="clear-history-button" variant="ghost" size="sm" onClick={() => { onClearHistory() }} className="h-8 px-2">
               <Trash2 className="h-4 w-4" />
               <span className="sr-only">Clear History</span>
             </Button>
