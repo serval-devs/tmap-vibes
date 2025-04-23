@@ -4,7 +4,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { useAddHistory } from "@/hooks/use-history";
 
-const apiUrl = "http://localhost:5000/api/v1";
+let apiUrl = "http://localhost:5000/api/v1";
+if (import.meta.env.MODE === "production") {
+  apiUrl = "https://api.altran.rip/api/v1";
+}
 
 export function useGetArticle() {
   return useQuery({
@@ -56,7 +59,7 @@ export function useCheckArticle() {
 
     // Save the result to history after the mutation is successful.
     onSuccess: async ({ article, result }) => {
-      const title = article.content.substring(0, 30) + "..."
+      const title = article.content.substring(0, 30) + "...";
 
       const historyItem: HistoryItem = {
         id: uuidv4(),
