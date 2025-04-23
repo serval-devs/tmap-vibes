@@ -47,7 +47,7 @@ jobs:
 
       - name: Run Coverage (pytest with coverage)
         run: |
-          coverage run --source=. -m pytest --maxfail=1 --disable-warnings -q
+          coverage run --branch --source=. -m pytest --maxfail=1 --disable-warnings -q
         shell: cmd
         working-directory: ./TensorflowModel
       
@@ -56,3 +56,15 @@ jobs:
           coverage report -m
         shell: cmd
         working-directory: ./TensorflowModel
+
+      - name: Generate HTML Coverage Report
+        run: |
+          coverage html -d coverage_html_report
+        shell: cmd
+        working-directory: ./TensorflowModel
+
+      - name: Upload Coverage Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ matrix.python-version }}
+          path: ./TensorflowModel/coverage_html_report

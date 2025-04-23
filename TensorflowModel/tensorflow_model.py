@@ -57,7 +57,7 @@ def train_model(
     X_test_seq = tokenizer.texts_to_sequences(X_test)
 
     # Define a maximum length for sequences (truncate longer texts)
-    max_len = 300
+    max_len = 325
 
     # Pad sequences to ensure they all have the same length
     X_train_pad = pad_sequences(X_train_seq, maxlen=max_len, padding='post')

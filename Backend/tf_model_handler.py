@@ -17,7 +17,7 @@ def validate_text_content(article: list, tokenizer) -> None:
     if not article[0].strip():
         raise ValueError("Article must not be empty.")
     seq = tokenizer.texts_to_sequences(article)
-    if len(seq[0]) > 300:
+    if len(seq[0]) > 325:
         raise ValueError("Article is too long (more than 300 tokens).")
 
 
@@ -25,7 +25,7 @@ def true_or_fake(
             model,
             tokenizer,
             text,
-            max_len=300):
+            max_len=325):
     validate_text_content(text, tokenizer)
 
     seq = tokenizer.texts_to_sequences(text)
