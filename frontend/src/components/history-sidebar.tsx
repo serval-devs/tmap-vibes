@@ -11,20 +11,29 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import { HistoryItem } from "@/lib/history"
 import { useClearHistory, useGetHistory } from "@/hooks/use-history"
+import { useSetArticle } from "@/hooks/api/use-articles"
+import { HistoryItem } from "@/lib/history"
 
 interface HistorySidebarProps {
-  onSelectItem: (item: HistoryItem) => void
+    onSelectItem: (item: HistoryItem) => void
 }
 
 export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
   const { data: history } = useGetHistory()
+  const { mutate: setItem } = useSetArticle()
   const { mutate: onClearHistory } = useClearHistory()
 
   if (!history) {
     return null
   }
+  
+  function handleItemSelected(item: HistoryItem) {
+    setItem(item)
+    onSelectItem(item)
+  }
+
+
 
   return (
     <Sidebar className="border-r">
@@ -59,7 +68,7 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
 
                   return (
                     <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton onClick={() => { onSelectItem(item) } } className="relative pl-10">
+                      <SidebarMenuButton onClick={() => { handleItemSelected(item) } } className="relative pl-10">
                         <div
                           className={`absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full ${getScoreColor()}`}
                         />
