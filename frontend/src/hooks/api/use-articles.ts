@@ -4,6 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { useAddHistory } from "@/hooks/use-history";
 
+const apiUrl = "http://localhost:5000/api/v1";
+
 export function useGetArticle() {
   return useQuery({
     queryKey: ["getArticle"],
@@ -28,41 +30,33 @@ export function useSetArticle() {
   });
 }
 
+
 export function useCheckArticle() {
   const { mutateAsync: addHistory } = useAddHistory();
   const { mutateAsync: setHistoryItem } = useSetArticle();
 
   return useMutation({
     mutationKey: ["checkArticle"],
-    mutationFn: (article: Article) => {
-      const confidence = Math.random(); // Simulate a confidence score
-      return Promise.resolve({
-        article,
-        result: {
-          isFake: confidence > 0.5,
-          confidence,
-        } satisfies ArticleCheck,
+    mutationFn: async (article: Article) => {
+      const response = await fetch(`${apiUrl}/articles`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(article),
       });
 
-      //const response = await fetch("http://localhost:3030/api/v1/articles", {
-      //  method: "POST",
-      //  headers: {
-      //    "Content-Type": "application/json",
-      //  },
-      //  body: JSON.stringify(article),
-      //});
-      //
-      //if (!response.ok) {
-      //  throw new Error("Network response was not ok");
-      //}
-      //
-      //const result = (await response.json()) as ArticleCheck;
-      //return { result, article };
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = (await response.json()) as ArticleCheck;
+      return { result, article };
     },
 
     // Save the result to history after the mutation is successful.
     onSuccess: async ({ article, result }) => {
-      const title = article.content.substring(0, 30) + "...";
+      const title = article.content.substring(0, 30) + "..."
 
       const historyItem: HistoryItem = {
         id: uuidv4(),
