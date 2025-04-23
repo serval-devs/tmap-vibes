@@ -58,7 +58,7 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
           ) : (
             <ScrollArea className="h-[calc(100vh-8rem)]">
               <SidebarMenu>
-                {history.map((item) => {
+                {history.map((item, index) => {
                   // Determine color based on score
                   const getScoreColor = () => {
                     if (item.result.confidence < 0.3) return "bg-green-500"
@@ -68,11 +68,15 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
 
                   return (
                     <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton onClick={() => { handleItemSelected(item) } } className="relative pl-10">
+                      <SidebarMenuButton 
+                        id={`history-menu-button-${index + 1}`}
+                        onClick={() => { handleItemSelected(item) }} 
+                        className="relative pl-10"
+                      >
                         <div
                           className={`absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full ${getScoreColor()}`}
                         />
-                        <div id="history-first-item" className="flex flex-col items-start">
+                        <div id={`history-item-${index + 1}`} className="flex flex-col items-start">
                           <span className="font-medium line-clamp-1">{item.title}</span>
                           <div className="flex items-center text-xs text-muted-foreground">
                             <Clock className="mr-1 h-3 w-3" />
