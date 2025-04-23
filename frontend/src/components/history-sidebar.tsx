@@ -41,7 +41,7 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">History</h2>
           {history.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={() => { onClearHistory() }} className="h-8 px-2">
+            <Button id="clear-history-button" variant="ghost" size="sm" onClick={() => { onClearHistory() }} className="h-8 px-2">
               <Trash2 className="h-4 w-4" />
               <span className="sr-only">Clear History</span>
             </Button>
@@ -58,7 +58,7 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
           ) : (
             <ScrollArea className="h-[calc(100vh-8rem)]">
               <SidebarMenu>
-                {history.map((item) => {
+                {history.map((item, index) => {
                   // Determine color based on score
                   const getScoreColor = () => {
                     if (item.result.confidence < 0.3) return "bg-green-500"
@@ -68,11 +68,15 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
 
                   return (
                     <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton onClick={() => { handleItemSelected(item) } } className="relative pl-10">
+                      <SidebarMenuButton 
+                        id={`history-menu-button-${String(index + 1)}`}
+                        onClick={() => { handleItemSelected(item) }} 
+                        className="relative pl-10"
+                      >
                         <div
                           className={`absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full ${getScoreColor()}`}
                         />
-                        <div id="history-first-item" className="flex flex-col items-start">
+                        <div id={`history-item-${String(index + 1)}`} className="flex flex-col items-start">
                           <span className="font-medium line-clamp-1">{item.title}</span>
                           <div className="flex items-center text-xs text-muted-foreground">
                             <Clock className="mr-1 h-3 w-3" />
