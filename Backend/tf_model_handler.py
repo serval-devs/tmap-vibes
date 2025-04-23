@@ -25,7 +25,7 @@ def true_or_fake(
             model,
             tokenizer,
             text,
-            max_len=300):
+            max_len=325):
     validate_text_content(text, tokenizer)
 
     seq = tokenizer.texts_to_sequences(text)
