@@ -19,11 +19,7 @@ export function FakeNewsDetector() {
   const [author, setAuthor] = useState(selectedItem?.article.author ?? "");
   const [website, setWebsite] = useState(selectedItem?.article.website ?? "");
 
-  const {
-    mutate: checkArticle,
-    error,
-    isPending,
-  } = useCheckArticle();
+  const { mutate: checkArticle, error, isPending } = useCheckArticle();
 
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -58,15 +54,15 @@ export function FakeNewsDetector() {
     <>
       <HistorySidebar onSelectItem={handleHistorySelect} />
       <SidebarInset className="flex flex-col items-center">
-        <div className="container mx-auto px-4 py-8 w-full">
-          <header className="flex items-center mb-6">
+        <div className="px-4 py-4">
+          <header className="flex items-center mb-4">
             <SidebarTrigger className="mr-2" />
             <h1 className="text-3xl font-bold">Fake News Detector</h1>
           </header>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-4">
             Analyze articles to determine if they might contain fake news.
           </p>
-          <div className="text-sm text-muted-foreground border border-dashed border-muted-foreground/50 p-4 rounded-md mb-8 max-w-2xl mx-auto">
+          <div className="text-sm text-muted-foreground border border-dashed border-muted-foreground/50 p-4 rounded-md mb-4">
             <p className="font-semibold mb-2">DISCLAIMER</p>
             <p>
               This tool is designed for use with only American English articles.
@@ -75,7 +71,7 @@ export function FakeNewsDetector() {
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="flex gap-4">
             <Card className="w-full max-w-2xl mx-auto">
               <CardHeader className="text-lg font-semibold">
                 Analyze Article
