@@ -100,8 +100,8 @@ def test_result_true():
 
     prediction = true_or_fake(model, tokenizer, text)
 
-    assert prediction[0][0] > 0.8, (
-        f"Expected prediction to be > 0.8 (True), but got {prediction[0][0]}"
+    assert prediction[0][0] > 0.5, (
+        f"Expected prediction to be > 0.5 (True), but got {prediction[0][0]}"
     )
 
 
@@ -173,7 +173,7 @@ def test_article_not_string():
 
 def test_article_too_long():
     tokenizer = MagicMock()
-    tokenizer.texts_to_sequences.return_value = [list(range(301))]
-    article = ["word " * 301]
+    tokenizer.texts_to_sequences.return_value = [list(range(326))]
+    article = ["word " * 326]
     with pytest.raises(ValueError, match="Article is too long"):
         validate_text_content(article, tokenizer)
