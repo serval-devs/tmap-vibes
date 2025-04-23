@@ -69,14 +69,14 @@ export function HistorySidebar({ onSelectItem }: HistorySidebarProps) {
                   return (
                     <SidebarMenuItem key={item.id}>
                       <SidebarMenuButton 
-                        id={`history-menu-button-${index + 1}`}
+                        id={`history-menu-button-${String(index + 1)}`}
                         onClick={() => { handleItemSelected(item) }} 
                         className="relative pl-10"
                       >
                         <div
                           className={`absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full ${getScoreColor()}`}
                         />
-                        <div id={`history-item-${index + 1}`} className="flex flex-col items-start">
+                        <div id={`history-item-${String(index + 1)}`} className="flex flex-col items-start">
                           <span className="font-medium line-clamp-1">{item.title}</span>
                           <div className="flex items-center text-xs text-muted-foreground">
                             <Clock className="mr-1 h-3 w-3" />
