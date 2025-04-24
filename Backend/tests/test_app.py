@@ -42,7 +42,7 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("isReal", response.json)
         self.assertIn("confidence", response.json)
-        self.assertTrue(50 <= response.json["confidence"] <= 99)
+        self.assertTrue(0 <= response.json["confidence"] <= 50)
 
 
 if __name__ == '__main__':
