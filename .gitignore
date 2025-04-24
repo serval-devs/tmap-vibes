@@ -1,0 +1,15 @@
+node_modules/
+.DS_Store
+.idea/
+*.pyc
+.coverage
+
+# Python virtual environment
+vibe/
+venv/
+
+# Robot framework
+*.log
+*.xml
+*.html
+*.png
