@@ -1,14 +1,23 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import random
+from tf_model_handler import (load_model_and_tokenizer, true_or_fake)
+import os
 
 app = Flask(__name__)
 CORS(app)
 
+root_dir = os.path.abspath(os.path.dirname(__file__))
+model_path = os.path.join(root_dir, "MLModels", "FakeTrueModel.keras")
+tokenizer_path = os.path.join(root_dir, "MLModels", "tokenizer.pkl")
+
+model, tokenizer = load_model_and_tokenizer(
+    model_path,
+    tokenizer_path
+)
+
 
 @app.route('/api/v1/articles', methods=['POST'])
 def check_article():
-
     if not request.is_json:
         response = jsonify({"error": "Request must be JSON"})
         response.status_code = 400
@@ -30,11 +39,11 @@ def check_article():
         response.headers["Error-Type"] = "InvalidType"
         return response
 
-    confidence = round(random.uniform(50, 99), 2)
-    is_real = confidence > 50
+    confidence_raw = true_or_fake(model, tokenizer, [data[content]])[0][0]
+    confidence = round(confidence_raw.item() * 100, 2)
 
     return jsonify({
-        "isReal": is_real,
+        "isReal": confidence > 50,
         "confidence": confidence
     }), 200
 
