@@ -126,7 +126,7 @@ export function FakeNewsDetector() {
                 ref={resultsRef}
                 className="animate-in fade-in-50 duration-300"
               >
-                <BinaryDisplay isFake={selectedItem.result.confidence > 0.5} />
+                <BinaryDisplay isFake={selectedItem.result.confidence < 0.5} />
               </div>
             )}
           </div>
